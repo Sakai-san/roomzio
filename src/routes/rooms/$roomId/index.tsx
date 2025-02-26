@@ -18,6 +18,7 @@ import { ButtonLink } from "../../../components/ButtonLink";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
+import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -99,9 +100,11 @@ function RoomDetail() {
             <EditCalendarIcon />
           </IconButton>
         )}
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
+        {!isRoomOccupied && (
+          <IconButton aria-label="release a room">
+            <AutoDeleteIcon />
+          </IconButton>
+        )}
         <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
           <ExpandMoreIcon />
         </ExpandMore>
