@@ -37,11 +37,7 @@ function Index() {
               roomId: room.id,
             }}
             state={{
-              roomData: {
-                id: room.id,
-                name: room.name,
-                busy: room.busy,
-              },
+              roomData: { ...room },
             }}
           >
             <ListItemAvatar>
