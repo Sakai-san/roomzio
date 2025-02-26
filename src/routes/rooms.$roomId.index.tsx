@@ -10,7 +10,6 @@ import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DevicesOtherIcon from "@mui/icons-material/DevicesOther";
 import { Avatar } from "../components/Avatar";
 import { ButtonLink } from "../components/ButtonLink";
@@ -59,20 +58,35 @@ function RoomDetail() {
   const room = Route.useLoaderData();
   const { roomId } = Route.useParams();
   const releaseRoom = useMutation({
-    mutationFn: (roomId) => {
-      return axios.post(`http://localhost:3000/rooms/${roomId}/release`);
+    mutationFn: async (roomId) => {
+      const response = await axios.post(`http://localhost:3000/rooms/${roomId}/release`);
+      console.log("releease", response);
+      return response;
+    },
+    onSuccess: (response) => {
+      console.log("releease onSuccess", response);
+      if (response.ok) {
+        router.invalidate();
+      }
     },
   });
 
   const bookRoom = useMutation({
-    mutationFn: (roomId) => {
-      return axios.post(`http://localhost:3000/rooms/${roomId}/book`);
+    mutationFn: async (roomId) => {
+      const response = await axios.post(`http://localhost:3000/rooms/${roomId}/book`);
+      console.log("book", response);
+      return response;
+    },
+    onSuccess: (response) => {
+      console.log("book onSuccess", response);
+      if (response.ok) {
+        router.invalidate();
+      }
     },
   });
 
   const isRoomOccupied = !!room.booking;
 
-  console.log("room", room);
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
@@ -109,7 +123,6 @@ function RoomDetail() {
           aria-label="book a room"
           onClick={() => {
             bookRoom.mutate(roomId);
-            router.invalidate();
           }}
         >
           <EditCalendarIcon />
