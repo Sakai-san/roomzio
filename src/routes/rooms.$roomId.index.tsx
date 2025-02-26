@@ -19,8 +19,6 @@ import EventBusyIcon from "@mui/icons-material/EventBusy";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import { useMutation } from "@tanstack/react-query";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
-import CloseIcon from "@mui/icons-material/Close";
-import Button from "@mui/material/Button/Button";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -59,8 +57,6 @@ function RoomDetail() {
   const router = useRouter();
   const room = Route.useLoaderData();
   const { roomId } = Route.useParams();
-  const { roomData } = useRouterState({ select: (s) => s.location.state });
-  console.log("roomData", roomData);
   const [notification, setNotification] = useState<{ message?: string; open: boolean }>({ open: false });
 
   const releaseRoom = useMutation({
@@ -93,7 +89,7 @@ function RoomDetail() {
     },
   });
 
-  const isRoomOccupied = roomData.busy;
+  const isRoomOccupied = !!room.booking;
 
   const [expanded, setExpanded] = useState(false);
 
@@ -115,7 +111,7 @@ function RoomDetail() {
         <CardHeader
           avatar={<Avatar id={room.id} name={room.name} type="Room" />}
           title={room.name}
-          subheader={roomData.busy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
+          subheader={isRoomOccupied ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
         />
         <CardContent sx={{ mx: 5 }}>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -136,7 +132,7 @@ function RoomDetail() {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton
-            disabled={roomData.busy}
+            disabled={isRoomOccupied}
             aria-label="book a room"
             onClick={() => {
               bookRoom.mutate(roomId);
@@ -146,7 +142,7 @@ function RoomDetail() {
           </IconButton>
 
           <IconButton
-            disabled={!roomData.busy}
+            disabled={!isRoomOccupied}
             aria-label="release a room"
             onClick={() => {
               releaseRoom.mutate(roomId);
