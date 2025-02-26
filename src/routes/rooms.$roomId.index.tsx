@@ -60,7 +60,7 @@ function RoomDetail() {
   const room = Route.useLoaderData();
   const { roomId } = Route.useParams();
   const { roomData } = useRouterState({ select: (s) => s.location.state });
-
+  console.log("roomData", roomData);
   const [notification, setNotification] = useState<{ message?: string; open: boolean }>({ open: false });
 
   const releaseRoom = useMutation({
@@ -93,6 +93,8 @@ function RoomDetail() {
     },
   });
 
+  const isRoomOccupied = roomData.busy;
+
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
@@ -113,7 +115,7 @@ function RoomDetail() {
         <CardHeader
           avatar={<Avatar id={room.id} name={room.name} type="Room" />}
           title={room.name}
-          subheader={roomData.isBusy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
+          subheader={roomData.busy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
         />
         <CardContent sx={{ mx: 5 }}>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -134,7 +136,7 @@ function RoomDetail() {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton
-            disabled={roomData.isBusy}
+            disabled={roomData.busy}
             aria-label="book a room"
             onClick={() => {
               bookRoom.mutate(roomId);
@@ -144,7 +146,7 @@ function RoomDetail() {
           </IconButton>
 
           <IconButton
-            disabled={!roomData.isBusy}
+            disabled={!roomData.busy}
             aria-label="release a room"
             onClick={() => {
               releaseRoom.mutate(roomId);
