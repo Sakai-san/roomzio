@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { getDevice } from "../../../../api";
+import { getDevice } from "..//api";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
-import { Avatar } from "../../../../components/Avatar";
+import { Avatar } from "../components/Avatar";
 import Battery0BarIcon from "@mui/icons-material/Battery0Bar";
 import Battery1BarIcon from "@mui/icons-material/Battery1Bar";
 import Battery2BarIcon from "@mui/icons-material/Battery2Bar";

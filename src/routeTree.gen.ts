@@ -12,8 +12,8 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
-import { Route as RoomsRoomIdIndexImport } from './routes/rooms/$roomId/index'
-import { Route as RoomsRoomIdDevicesDeviceIdImport } from './routes/rooms/$roomId/devices/$deviceId'
+import { Route as RoomsRoomIdIndexImport } from './routes/rooms.$roomId.index'
+import { Route as RoomsRoomIdDevicesDeviceIdImport } from './routes/rooms.$roomId.devices.$deviceId'
 
 // Create/Update Routes
 
@@ -126,10 +126,10 @@ export const routeTree = rootRoute
       "filePath": "index.tsx"
     },
     "/rooms/$roomId/": {
-      "filePath": "rooms/$roomId/index.tsx"
+      "filePath": "rooms.$roomId.index.tsx"
     },
     "/rooms/$roomId/devices/$deviceId": {
-      "filePath": "rooms/$roomId/devices/$deviceId.tsx"
+      "filePath": "rooms.$roomId.devices.$deviceId.tsx"
     }
   }
 }

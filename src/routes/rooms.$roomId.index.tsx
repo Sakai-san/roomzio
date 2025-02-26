@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { getRoom } from "../../../api";
+import { getRoom } from "../api";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -12,8 +12,8 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DevicesOtherIcon from "@mui/icons-material/DevicesOther";
-import { Avatar } from "../../../components/Avatar";
-import { ButtonLink } from "../../../components/ButtonLink";
+import { Avatar } from "../components/Avatar";
+import { ButtonLink } from "../components/ButtonLink";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
