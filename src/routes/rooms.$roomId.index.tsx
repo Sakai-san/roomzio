@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { getRoom } from "../api";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
@@ -18,6 +18,8 @@ import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
+import { useMutation } from "@tanstack/react-query";
+import axios from "redaxios";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -53,9 +55,22 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 function RoomDetail() {
+  const router = useRouter();
   const room = Route.useLoaderData();
   const { roomId } = Route.useParams();
-  const isRoomOccupied = room.booking;
+  const releaseRoom = useMutation({
+    mutationFn: (roomId) => {
+      return axios.post(`http://localhost:3000/rooms/${roomId}/release`);
+    },
+  });
+
+  const bookRoom = useMutation({
+    mutationFn: (roomId) => {
+      return axios.post(`http://localhost:3000/rooms/${roomId}/book`);
+    },
+  });
+
+  const isRoomOccupied = !!room.booking;
 
   console.log("room", room);
   const [expanded, setExpanded] = useState(false);
@@ -68,11 +83,6 @@ function RoomDetail() {
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
         avatar={<Avatar id={room.id} name={room.name} type="Room" />}
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
         title={room.name}
         subheader={isRoomOccupied ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
       />
@@ -94,16 +104,28 @@ function RoomDetail() {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {!isRoomOccupied && (
-          <IconButton aria-label="book a room">
-            <EditCalendarIcon />
-          </IconButton>
-        )}
-        {isRoomOccupied && (
-          <IconButton aria-label="release a room">
-            <AutoDeleteIcon />
-          </IconButton>
-        )}
+        <IconButton
+          disabled={isRoomOccupied}
+          aria-label="book a room"
+          onClick={() => {
+            bookRoom.mutate(roomId);
+            router.invalidate();
+          }}
+        >
+          <EditCalendarIcon />
+        </IconButton>
+
+        <IconButton
+          disabled={!isRoomOccupied}
+          aria-label="release a room"
+          onClick={() => {
+            releaseRoom.mutate(roomId);
+            router.invalidate();
+          }}
+        >
+          <AutoDeleteIcon />
+        </IconButton>
+
         <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
           <ExpandMoreIcon />
         </ExpandMore>
