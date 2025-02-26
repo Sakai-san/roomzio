@@ -100,7 +100,7 @@ function RoomDetail() {
             <EditCalendarIcon />
           </IconButton>
         )}
-        {!isRoomOccupied && (
+        {isRoomOccupied && (
           <IconButton aria-label="release a room">
             <AutoDeleteIcon />
           </IconButton>
