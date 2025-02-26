@@ -5,7 +5,6 @@ import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
@@ -19,6 +18,9 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import DevicesOtherIcon from "@mui/icons-material/DevicesOther";
 import { Avatar } from "../../../components/Avatar";
 import { ButtonLink } from "../../../components/ButtonLink";
+import EditCalendarIcon from "@mui/icons-material/EditCalendar";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import EventBusyIcon from "@mui/icons-material/EventBusy";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -75,7 +77,7 @@ function RoomDetail() {
           </IconButton>
         }
         title={room.name}
-        subheader={isRoomOccupied ? <DoNotDisturbAltIcon color="error" /> : <CheckCircleOutlineIcon color="success" />}
+        subheader={isRoomOccupied ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
       />
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -95,9 +97,11 @@ function RoomDetail() {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
+        {!isRoomOccupied && (
+          <IconButton aria-label="book a room">
+            <EditCalendarIcon />
+          </IconButton>
+        )}
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
