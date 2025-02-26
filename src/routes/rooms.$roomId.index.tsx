@@ -93,8 +93,6 @@ function RoomDetail() {
     },
   });
 
-  const isRoomOccupied = !!room.booking;
-
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
@@ -115,7 +113,7 @@ function RoomDetail() {
         <CardHeader
           avatar={<Avatar id={room.id} name={room.name} type="Room" />}
           title={room.name}
-          subheader={isRoomOccupied ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
+          subheader={roomData.isBusy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
         />
         <CardContent sx={{ mx: 5 }}>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -136,7 +134,7 @@ function RoomDetail() {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton
-            disabled={isRoomOccupied}
+            disabled={roomData.isBusy}
             aria-label="book a room"
             onClick={() => {
               bookRoom.mutate(roomId);
@@ -146,7 +144,7 @@ function RoomDetail() {
           </IconButton>
 
           <IconButton
-            disabled={!isRoomOccupied}
+            disabled={!roomData.isBusy}
             aria-label="release a room"
             onClick={() => {
               releaseRoom.mutate(roomId);
