@@ -64,7 +64,7 @@ function RoomDetail() {
   const [notification, setNotification] = useState<{ message?: string; open: boolean }>({ open: false });
 
   const releaseRoom = useMutation({
-    mutationFn: (roomId) => {
+    mutationFn: (roomId: string) => {
       return fetch(`http://localhost:3000/rooms/${roomId}/release`, {
         method: "POST",
       });
@@ -72,14 +72,14 @@ function RoomDetail() {
     onSuccess: async (response) => {
       if (response.ok) {
         const { message } = await response.json();
-        //        router.invalidate();
+        router.invalidate();
         setNotification({ message, open: true });
       }
     },
   });
 
   const bookRoom = useMutation({
-    mutationFn: (roomId) => {
+    mutationFn: (roomId: string) => {
       return fetch(`http://localhost:3000/rooms/${roomId}/book`, {
         method: "POST",
       });
@@ -87,7 +87,7 @@ function RoomDetail() {
     onSuccess: async (response) => {
       const { message } = await response.json();
       if (response.ok) {
-        //    router.invalidate();
+        router.invalidate();
         setNotification({ message, open: true });
       }
     },
@@ -186,19 +186,9 @@ function RoomDetail() {
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={!!notification.message && notification.open}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={handleClose}
         message={notification.message}
-        action={
-          <Fragment>
-            <Button color="secondary" size="small" onClick={handleClose}>
-              {notification.message}
-            </Button>
-            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </Fragment>
-        }
       />
     </>
   );
