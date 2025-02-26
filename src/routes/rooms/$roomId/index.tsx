@@ -9,7 +9,6 @@ import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Collapse from "@mui/material/Collapse";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
-import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DevicesOtherIcon from "@mui/icons-material/DevicesOther";
