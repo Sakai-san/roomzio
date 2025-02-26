@@ -77,7 +77,7 @@ function RoomDetail() {
         title={room.name}
         subheader={isRoomOccupied ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
       />
-      <CardContent>
+      <CardContent sx={{ mx: 5 }}>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           <DevicesOtherIcon />
           {room.devices.map((device) => (
