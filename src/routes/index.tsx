@@ -36,9 +36,6 @@ function Index() {
             params={{
               roomId: room.id,
             }}
-            state={{
-              roomData: { ...room },
-            }}
           >
             <ListItemAvatar>
               <Avatar id={room.id} name={room.name} type="Room" />

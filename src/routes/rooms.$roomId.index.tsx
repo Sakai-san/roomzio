@@ -1,5 +1,5 @@
-import { Fragment, useState } from "react";
-import { createFileRoute, useRouter, useRouterState } from "@tanstack/react-router";
+import { useState } from "react";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { getRoom } from "../api";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
@@ -19,6 +19,7 @@ import EventBusyIcon from "@mui/icons-material/EventBusy";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import { useMutation } from "@tanstack/react-query";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
+import Alert, { AlertProps } from "@mui/material/Alert/Alert";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -57,7 +58,11 @@ function RoomDetail() {
   const router = useRouter();
   const room = Route.useLoaderData();
   const { roomId } = Route.useParams();
-  const [notification, setNotification] = useState<{ message?: string; open: boolean }>({ open: false });
+  const [notification, setNotification] = useState<{
+    message?: string;
+    severity?: AlertProps["severity"];
+    open: boolean;
+  }>({ open: false });
 
   const releaseRoom = useMutation({
     mutationFn: (roomId: string) => {
@@ -68,8 +73,11 @@ function RoomDetail() {
     onSuccess: async (response) => {
       if (response.ok) {
         const { message } = await response.json();
-        router.invalidate();
         setNotification({ message, open: true });
+        router.invalidate();
+      } else {
+        const { error } = await response.json();
+        setNotification({ message: error, severity: "error", open: true });
       }
     },
   });
@@ -81,10 +89,13 @@ function RoomDetail() {
       });
     },
     onSuccess: async (response) => {
-      const { message } = await response.json();
       if (response.ok) {
-        router.invalidate();
+        const { message } = await response.json();
         setNotification({ message, open: true });
+        router.invalidate();
+      } else {
+        const { error } = await response.json();
+        setNotification({ message: error, severity: "error", open: true });
       }
     },
   });
@@ -184,8 +195,12 @@ function RoomDetail() {
         open={!!notification.message && notification.open}
         autoHideDuration={3000}
         onClose={handleClose}
-        message={notification.message}
-      />
+        key={notification.message}
+      >
+        <Alert onClose={handleClose} severity={notification.severity} variant="filled" sx={{ width: "100%" }}>
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
