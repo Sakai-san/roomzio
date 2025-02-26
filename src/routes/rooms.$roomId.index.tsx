@@ -61,7 +61,6 @@ function RoomDetail() {
   const { roomId } = Route.useParams();
   const { roomData } = useRouterState({ select: (s) => s.location.state });
 
-  console.log("roomData ", roomData);
   const [notification, setNotification] = useState<{ message?: string; open: boolean }>({ open: false });
 
   const releaseRoom = useMutation({
@@ -70,15 +69,12 @@ function RoomDetail() {
         method: "POST",
       });
     },
-    onSuccess: (response) => {
-      console.log("response", response);
+    onSuccess: async (response) => {
       if (response.ok) {
-        router.invalidate();
-        setNotification(response.message);
+        const { message } = await response.json();
+        //        router.invalidate();
+        setNotification({ message, open: true });
       }
-    },
-    onSettled: (response) => {
-      router.invalidate();
     },
   });
 
@@ -88,15 +84,12 @@ function RoomDetail() {
         method: "POST",
       });
     },
-    onSuccess: (response) => {
+    onSuccess: async (response) => {
+      const { message } = await response.json();
       if (response.ok) {
-        router.invalidate();
+        //    router.invalidate();
+        setNotification({ message, open: true });
       }
-    },
-    onSettled: (response) => {
-      console.log("response", response);
-      router.invalidate();
-      setNotification(response.message);
     },
   });
 
@@ -157,7 +150,6 @@ function RoomDetail() {
             aria-label="release a room"
             onClick={() => {
               releaseRoom.mutate(roomId);
-              router.invalidate();
             }}
           >
             <AutoDeleteIcon />
@@ -192,10 +184,11 @@ function RoomDetail() {
       </Card>
 
       <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
         open={!!notification.message && notification.open}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="Note archived"
+        message={notification.message}
         action={
           <Fragment>
             <Button color="secondary" size="small" onClick={handleClose}>
