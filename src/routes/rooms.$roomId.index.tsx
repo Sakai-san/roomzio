@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { getRoom } from "../api";
 import Typography from "@mui/material/Typography";
@@ -18,7 +18,9 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import { useMutation } from "@tanstack/react-query";
-import axios from "redaxios";
+import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
+import CloseIcon from "@mui/icons-material/Close";
+import Button from "@mui/material/Button/Button";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -57,31 +59,41 @@ function RoomDetail() {
   const router = useRouter();
   const room = Route.useLoaderData();
   const { roomId } = Route.useParams();
+  const [notification, setNotification] = useState<{ message?: string; open: boolean }>({ open: false });
+
   const releaseRoom = useMutation({
-    mutationFn: async (roomId) => {
-      const response = await axios.post(`http://localhost:3000/rooms/${roomId}/release`);
-      console.log("releease", response);
-      return response;
+    mutationFn: (roomId) => {
+      return fetch(`http://localhost:3000/rooms/${roomId}/release`, {
+        method: "POST",
+      });
     },
     onSuccess: (response) => {
-      console.log("releease onSuccess", response);
+      console.log("response", response);
       if (response.ok) {
         router.invalidate();
+        setNotification(response.message);
       }
+    },
+    onSettled: (response) => {
+      router.invalidate();
     },
   });
 
   const bookRoom = useMutation({
-    mutationFn: async (roomId) => {
-      const response = await axios.post(`http://localhost:3000/rooms/${roomId}/book`);
-      console.log("book", response);
-      return response;
+    mutationFn: (roomId) => {
+      return fetch(`http://localhost:3000/rooms/${roomId}/book`, {
+        method: "POST",
+      });
     },
     onSuccess: (response) => {
-      console.log("book onSuccess", response);
       if (response.ok) {
         router.invalidate();
       }
+    },
+    onSettled: (response) => {
+      console.log("response", response);
+      router.invalidate();
+      setNotification(response.message);
     },
   });
 
@@ -93,78 +105,105 @@ function RoomDetail() {
     setExpanded(!expanded);
   };
 
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setNotification({ open: false });
+  };
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardHeader
-        avatar={<Avatar id={room.id} name={room.name} type="Room" />}
-        title={room.name}
-        subheader={isRoomOccupied ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
-      />
-      <CardContent sx={{ mx: 5 }}>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          <DevicesOtherIcon />
-          {room.devices.map((device) => (
-            <ButtonLink
-              key={device.id}
-              to="/rooms/$roomId/devices/$deviceId"
-              params={{
-                roomId,
-                deviceId: device.id,
-              }}
-            >
-              {device.name}
-            </ButtonLink>
-          ))}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <IconButton
-          disabled={isRoomOccupied}
-          aria-label="book a room"
-          onClick={() => {
-            bookRoom.mutate(roomId);
-          }}
-        >
-          <EditCalendarIcon />
-        </IconButton>
-
-        <IconButton
-          disabled={!isRoomOccupied}
-          aria-label="release a room"
-          onClick={() => {
-            releaseRoom.mutate(roomId);
-            router.invalidate();
-          }}
-        >
-          <AutoDeleteIcon />
-        </IconButton>
-
-        <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
-          <ExpandMoreIcon />
-        </ExpandMore>
-      </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography sx={{ marginBottom: 2 }}>Method:</Typography>
-          <Typography sx={{ marginBottom: 2 }}>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.
+    <>
+      <Card sx={{ maxWidth: 345 }}>
+        <CardHeader
+          avatar={<Avatar id={room.id} name={room.name} type="Room" />}
+          title={room.name}
+          subheader={isRoomOccupied ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
+        />
+        <CardContent sx={{ mx: 5 }}>
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            <DevicesOtherIcon />
+            {room.devices.map((device) => (
+              <ButtonLink
+                key={device.id}
+                to="/rooms/$roomId/devices/$deviceId"
+                params={{
+                  roomId,
+                  deviceId: device.id,
+                }}
+              >
+                {device.name}
+              </ButtonLink>
+            ))}
           </Typography>
-          <Typography sx={{ marginBottom: 2 }}>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high heat. Add chicken,
-            shrimp and chorizo, and cook, stirring occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp
-            to a large plate and set aside, leaving chicken and chorizo in the pan. Add pimentón, bay leaves, garlic,
-            tomatoes, onion, salt and pepper, and cook, stirring often until thickened and fragrant, about 10 minutes.
-            Add saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography sx={{ marginBottom: 2 }}>
-            Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook without stirring,
-            until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
-            mussels, tucking them down into the rice, and cook again without stirring, until mussels have opened and
-            rice is just tender, 5 to 7 minutes more. (Discard any mussels that don&apos;t open.)
-          </Typography>
-          <Typography>Set aside off of the heat to let rest for 10 minutes, and then serve.</Typography>
         </CardContent>
-      </Collapse>
-    </Card>
+        <CardActions disableSpacing>
+          <IconButton
+            disabled={isRoomOccupied}
+            aria-label="book a room"
+            onClick={() => {
+              bookRoom.mutate(roomId);
+            }}
+          >
+            <EditCalendarIcon />
+          </IconButton>
+
+          <IconButton
+            disabled={!isRoomOccupied}
+            aria-label="release a room"
+            onClick={() => {
+              releaseRoom.mutate(roomId);
+              router.invalidate();
+            }}
+          >
+            <AutoDeleteIcon />
+          </IconButton>
+
+          <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
+            <ExpandMoreIcon />
+          </ExpandMore>
+        </CardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography sx={{ marginBottom: 2 }}>Method:</Typography>
+            <Typography sx={{ marginBottom: 2 }}>
+              Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.
+            </Typography>
+            <Typography sx={{ marginBottom: 2 }}>
+              Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over medium-high heat. Add chicken,
+              shrimp and chorizo, and cook, stirring occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp
+              to a large plate and set aside, leaving chicken and chorizo in the pan. Add pimentón, bay leaves, garlic,
+              tomatoes, onion, salt and pepper, and cook, stirring often until thickened and fragrant, about 10 minutes.
+              Add saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
+            </Typography>
+            <Typography sx={{ marginBottom: 2 }}>
+              Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook without stirring,
+              until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
+              mussels, tucking them down into the rice, and cook again without stirring, until mussels have opened and
+              rice is just tender, 5 to 7 minutes more. (Discard any mussels that don&apos;t open.)
+            </Typography>
+            <Typography>Set aside off of the heat to let rest for 10 minutes, and then serve.</Typography>
+          </CardContent>
+        </Collapse>
+      </Card>
+
+      <Snackbar
+        open={!!notification.message && notification.open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Note archived"
+        action={
+          <Fragment>
+            <Button color="secondary" size="small" onClick={handleClose}>
+              {notification.message}
+            </Button>
+            <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Fragment>
+        }
+      />
+    </>
   );
 }
