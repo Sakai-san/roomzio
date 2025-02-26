@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useRouter, useRouterState } from "@tanstack/react-router";
 import { getRoom } from "../api";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
@@ -59,6 +59,9 @@ function RoomDetail() {
   const router = useRouter();
   const room = Route.useLoaderData();
   const { roomId } = Route.useParams();
+  const { roomData } = useRouterState({ select: (s) => s.location.state });
+
+  console.log("roomData ", roomData);
   const [notification, setNotification] = useState<{ message?: string; open: boolean }>({ open: false });
 
   const releaseRoom = useMutation({
