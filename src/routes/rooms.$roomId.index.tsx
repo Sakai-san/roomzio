@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { getRoom } from "../api";
 import Typography from "@mui/material/Typography";
@@ -11,7 +11,6 @@ import Collapse from "@mui/material/Collapse";
 import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DevicesOtherIcon from "@mui/icons-material/DevicesOther";
-import { Avatar } from "../components/Avatar";
 import { ButtonLink } from "../components/ButtonLink";
 import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
@@ -21,6 +20,8 @@ import { useMutation } from "@tanstack/react-query";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import Alert, { AlertProps } from "@mui/material/Alert/Alert";
 import Stack from "@mui/material/Stack/Stack";
+import { Avatar as MUIAvatar } from "@mui/material";
+import { Avatar } from "../components/Avatar";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -105,6 +106,10 @@ function RoomDetail() {
 
   const [expanded, setExpanded] = useState(false);
 
+  useEffect(() => {
+    setExpanded(false);
+  }, [isRoomOccupied]);
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -162,7 +167,7 @@ function RoomDetail() {
               <AutoDeleteIcon />
             </IconButton>
 
-            {!isRoomOccupied && (
+            {isRoomOccupied && (
               <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
                 <ExpandMoreIcon />
               </ExpandMore>
@@ -171,9 +176,10 @@ function RoomDetail() {
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
               <Typography sx={{ marginBottom: 2 }}> Booked by:</Typography>
-              <Typography sx={{ marginBottom: 2 }}>
-                Heat 1/2 cup of the broth in a pot until simmering, add saffron and set aside for 10 minutes.
-              </Typography>
+              <Stack sx={{ marginBottom: 2 }} direction="row" alignItems="center" gap={3}>
+                <MUIAvatar alt={room.booking?.fullName} src={room.booking?.avatar}></MUIAvatar>
+                <Typography>{room.booking?.fullName}</Typography>
+              </Stack>
             </CardContent>
           </Collapse>
         </Card>

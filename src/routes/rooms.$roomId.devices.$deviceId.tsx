@@ -13,6 +13,7 @@ import Battery5BarIcon from "@mui/icons-material/Battery5Bar";
 import Battery6BarIcon from "@mui/icons-material/Battery6Bar";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
 import Badge from "@mui/material/Badge";
+import Stack from "@mui/material/Stack";
 
 export const Route = createFileRoute("/rooms/$roomId/devices/$deviceId")({
   loader: ({ params: { deviceId } }) => getDevice(deviceId),
@@ -44,13 +45,15 @@ function DeviceDetail() {
   const device = Route.useLoaderData();
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardHeader avatar={<Avatar id={device.id} name={device.name} type="Device" />} title={device.name} />
-      <CardContent>
-        <Badge color="secondary" badgeContent={device.battery}>
-          {getBatteryIcon(device.battery)}
-        </Badge>
-      </CardContent>
-    </Card>
+    <Stack alignItems="center" width="100%">
+      <Card sx={{ width: 345 }}>
+        <CardHeader avatar={<Avatar id={device.id} name={device.name} type="Device" />} title={device.name} />
+        <CardContent>
+          <Badge color="secondary" badgeContent={device.battery}>
+            {getBatteryIcon(device.battery)}
+          </Badge>
+        </CardContent>
+      </Card>
+    </Stack>
   );
 }
