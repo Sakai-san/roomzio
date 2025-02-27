@@ -1,8 +1,7 @@
-import axios from "redaxios";
 import { Device } from "../../api/server";
 
-export async function getRoom(id: string): Promise<Device> {
-  const rooms = await fetch(`http://localhost:3000/devices/${id}`);
-  const json = await rooms.json();
+export async function getDevice(id: string): Promise<Device> {
+  const device = await fetch(`http://localhost:3000/devices/${id}`);
+  const json = await device.json();
   return json;
 }
