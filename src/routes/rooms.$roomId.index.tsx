@@ -143,7 +143,6 @@ function RoomDetail() {
         </CardContent>
         <CardActions disableSpacing>
           <IconButton
-            disabled={isRoomOccupied}
             aria-label="book a room"
             onClick={() => {
               bookRoom.mutate(roomId);
@@ -153,7 +152,6 @@ function RoomDetail() {
           </IconButton>
 
           <IconButton
-            disabled={!isRoomOccupied}
             aria-label="release a room"
             onClick={() => {
               releaseRoom.mutate(roomId);

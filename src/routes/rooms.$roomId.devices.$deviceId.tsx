@@ -33,10 +33,8 @@ const getBatteryIcon = (level: number) => {
       return <Battery4BarIcon />;
     case level >= 75 && level < 85:
       return <Battery5BarIcon />;
-    case level >= 85 && level < 95:
-      return <Battery6BarIcon />;
     case level >= 95 && level < 100:
-      return <Battery5BarIcon />;
+      return <Battery6BarIcon />;
     default:
       return <BatteryFullIcon />;
   }
