@@ -193,7 +193,7 @@ function RoomDetail() {
         open={!!notification.message && notification.open}
         autoHideDuration={3000}
         onClose={handleClose}
-        key={notification.message}
+        key={Date.now().toString()}
       >
         <Alert onClose={handleClose} severity={notification.severity} variant="filled" sx={{ width: "100%" }}>
           {notification.message}
