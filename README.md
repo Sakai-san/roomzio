@@ -61,7 +61,7 @@ This will run the app on http://localhost:3001 and the API on http://localhost:3
 | **Booking** | fullName | string   | Full name of the person who booked the room.        |
 |             | avatar   | string   | Avatar image URL of the person who booked the room. |
 
-## Feedack from candidate
+## Feedback from candidate
 
 First off, thanks for the challenge. I do appreciate these hands-on a lot over academic questions.
 
