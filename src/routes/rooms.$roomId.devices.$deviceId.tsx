@@ -49,7 +49,15 @@ function DeviceDetail() {
       <Card sx={{ width: 345 }}>
         <CardHeader avatar={<Avatar id={device.id} name={device.name} type="Device" />} title={device.name} />
         <CardContent>
-          <Badge color="secondary" badgeContent={device.battery}>
+          <Badge
+            color="secondary"
+            badgeContent={device.battery}
+            sx={{
+              "& .MuiBadge-badge": {
+                right: -5,
+              },
+            }}
+          >
             {getBatteryIcon(device.battery)}
           </Badge>
         </CardContent>
