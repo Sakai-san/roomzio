@@ -1,5 +1,3 @@
-import axios from "redaxios";
-
 export type RoomType = {
   id: string;
   name: string;
