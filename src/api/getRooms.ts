@@ -6,6 +6,8 @@ export type RoomType = {
   busy: string;
 };
 
-export async function getRooms() {
-  return await axios.get<Array<RoomType>>("http://localhost:3000/rooms").then((r) => r.data);
+export async function getRooms(): Promise<Array<RoomType>> {
+  const rooms = await fetch("http://localhost:3000/rooms");
+  const json = await rooms.json();
+  return json;
 }
