@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { getDevice } from "..//api";
-import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
@@ -13,6 +12,7 @@ import Battery4BarIcon from "@mui/icons-material/Battery4Bar";
 import Battery5BarIcon from "@mui/icons-material/Battery5Bar";
 import Battery6BarIcon from "@mui/icons-material/Battery6Bar";
 import BatteryFullIcon from "@mui/icons-material/BatteryFull";
+import Badge from "@mui/material/Badge";
 
 export const Route = createFileRoute("/rooms/$roomId/devices/$deviceId")({
   loader: ({ params: { deviceId } }) => getDevice(deviceId),
@@ -47,8 +47,9 @@ function DeviceDetail() {
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader avatar={<Avatar id={device.id} name={device.name} type="Device" />} title={device.name} />
       <CardContent>
-        {getBatteryIcon(device.battery)}
-        <Typography>{device.battery}</Typography>
+        <Badge color="secondary" badgeContent={device.battery}>
+          {getBatteryIcon(device.battery)}
+        </Badge>
       </CardContent>
     </Card>
   );
