@@ -31,7 +31,7 @@ const getBatteryIcon = (level: number) => {
       return <Battery3BarIcon />;
     case level >= 55 && level < 75:
       return <Battery4BarIcon />;
-    case level >= 75 && level < 85:
+    case level >= 75 && level < 95:
       return <Battery5BarIcon />;
     case level >= 95 && level < 100:
       return <Battery6BarIcon />;
@@ -47,7 +47,7 @@ function DeviceDetail() {
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader avatar={<Avatar id={device.id} name={device.name} type="Device" />} title={device.name} />
       <CardContent>
-        {getBatteryIcon(2 || device.battery)}
+        {getBatteryIcon(device.battery)}
         <Typography>{device.battery}</Typography>
       </CardContent>
     </Card>
