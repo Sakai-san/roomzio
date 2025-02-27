@@ -175,7 +175,7 @@ function RoomDetail() {
           </CardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography sx={{ marginBottom: 2 }}> Booked by:</Typography>
+              <Typography sx={{ marginBottom: 2 }}>Booked by:</Typography>
               <Stack sx={{ marginBottom: 2 }} direction="row" alignItems="center" gap={3}>
                 <MUIAvatar alt={room.booking?.fullName} src={room.booking?.avatar}></MUIAvatar>
                 <Typography>{room.booking?.fullName}</Typography>
@@ -183,19 +183,18 @@ function RoomDetail() {
             </CardContent>
           </Collapse>
         </Card>
-
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          open={!!notification.message && notification.open}
-          autoHideDuration={3000}
-          onClose={handleClose}
-          key={JSON.stringify(notification)}
-        >
-          <Alert onClose={handleClose} severity={notification.severity} variant="filled" sx={{ width: "100%" }}>
-            {notification.message}
-          </Alert>
-        </Snackbar>
       </Stack>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        open={!!notification.message && notification.open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        key={JSON.stringify(notification)}
+      >
+        <Alert onClose={handleClose} severity={notification.severity} variant="filled" sx={{ width: "100%" }}>
+          {notification.message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
