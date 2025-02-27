@@ -12,16 +12,16 @@ import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DevicesOtherIcon from "@mui/icons-material/DevicesOther";
 import { ButtonLink } from "../components/ButtonLink";
-import EditCalendarIcon from "@mui/icons-material/EditCalendar";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
-import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import { useMutation } from "@tanstack/react-query";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import Alert, { AlertProps } from "@mui/material/Alert/Alert";
 import Stack from "@mui/material/Stack/Stack";
 import { Avatar as MUIAvatar } from "@mui/material";
 import { Avatar } from "../components/Avatar";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
+import LockIcon from "@mui/icons-material/Lock";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -155,7 +155,7 @@ function RoomDetail() {
                 bookRoom.mutate(roomId);
               }}
             >
-              <EditCalendarIcon />
+              <LockIcon />
             </IconButton>
 
             <IconButton
@@ -164,7 +164,7 @@ function RoomDetail() {
                 releaseRoom.mutate(roomId);
               }}
             >
-              <AutoDeleteIcon />
+              <LockOpenIcon />
             </IconButton>
 
             {isRoomOccupied && (
