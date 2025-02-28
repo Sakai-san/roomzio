@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { getRoom } from "../api";
+import { getRoom, postBook, postRelease } from "../api";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -66,31 +66,11 @@ function RoomDetail() {
     open: boolean;
   }>({ open: false });
 
-  const releaseRoom = useMutation({
-    mutationFn: (roomId: string) => {
-      return fetch(`http://localhost:3000/rooms/${roomId}/release`, {
-        method: "POST",
-      });
-    },
-    onSuccess: async (response) => {
-      if (response.ok) {
-        const { message } = await response.json();
-        setNotification({ message, open: true });
-        router.invalidate();
-      } else {
-        const { error } = await response.json();
-        setNotification({ message: error, severity: "error", open: true });
-      }
-    },
-  });
+  const { mutate: mutateBook } = useMutation({ mutationFn: postBook });
+  const { mutate: mutateRelease } = useMutation({ mutationFn: postRelease });
 
-  const bookRoom = useMutation({
-    mutationFn: (roomId: string) => {
-      return fetch(`http://localhost:3000/rooms/${roomId}/book`, {
-        method: "POST",
-      });
-    },
-    onSuccess: async (response) => {
+  const mutationOption = {
+    onSuccess: async (response: Response) => {
       if (response.ok) {
         const { message } = await response.json();
         setNotification({ message, open: true });
@@ -100,7 +80,7 @@ function RoomDetail() {
         setNotification({ message: error, severity: "error", open: true });
       }
     },
-  });
+  };
 
   const isRoomOccupied = !!room.booking;
 
@@ -149,21 +129,11 @@ function RoomDetail() {
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton
-              aria-label="book a room"
-              onClick={() => {
-                bookRoom.mutate(roomId);
-              }}
-            >
+            <IconButton aria-label="book a room" onClick={() => mutateBook(roomId, mutationOption)}>
               <LockIcon />
             </IconButton>
 
-            <IconButton
-              aria-label="release a room"
-              onClick={() => {
-                releaseRoom.mutate(roomId);
-              }}
-            >
+            <IconButton aria-label="release a room" onClick={() => mutateRelease(roomId, mutationOption)}>
               <LockOpenIcon />
             </IconButton>
 
