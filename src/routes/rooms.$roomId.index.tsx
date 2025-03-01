@@ -26,6 +26,7 @@ import LockIcon from "@mui/icons-material/Lock";
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
   component: RoomDetail,
+  pendingComponent: <Circular />,
 });
 
 interface ExpandMoreProps extends IconButtonProps {
