@@ -107,7 +107,7 @@ function RoomDetail() {
       <Stack alignItems="center" width="100%">
         <Card sx={{ width: 345 }}>
           <CardHeader
-            avatar={<Avatar id={room.id} name={room.name} type="Room" />}
+            avatar={<Avatar uuid={room.id} alias={room.name} kind="Room" />}
             title={room.name}
             subheader={isRoomOccupied ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
           />

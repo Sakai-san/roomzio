@@ -4,20 +4,20 @@ import { FC } from "react";
 import uniqolor from "uniqolor";
 
 type AvtarProps = {
-  id: string;
-  name: string;
-  type: "Device" | "Room";
+  uuid: string;
+  alias: string;
+  kind: "Device" | "Room";
 };
 
-export const Avatar: FC<AvtarProps> = ({ id, name, type }) => {
-  const names = words(name);
+export const Avatar: FC<AvtarProps> = ({ uuid, alias, kind }) => {
+  const names = words(alias);
   return (
     <MUIAvatar
       sx={{
-        bgcolor: uniqolor(id).color,
+        bgcolor: uniqolor(uuid).color,
       }}
-      alt={`${type} avatar ${name}`}
-      aria-label={type}
+      alt={`${kind} avatar ${alias}`}
+      aria-label={kind}
     >
       {`${names[0].at(0)} ${names[1].at(0)}`}
     </MUIAvatar>

@@ -38,7 +38,7 @@ function Index() {
             }}
           >
             <ListItemAvatar>
-              <Avatar id={room.id} name={room.name} type="Room" />
+              <Avatar uuid={room.id} alias={room.name} kind="Room" />
             </ListItemAvatar>
             <ListItemText primary={room.name} />
             <ListItemIcon>

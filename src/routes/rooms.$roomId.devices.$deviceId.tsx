@@ -47,7 +47,7 @@ function DeviceDetail() {
   return (
     <Stack alignItems="center" width="100%">
       <Card sx={{ width: 345 }}>
-        <CardHeader avatar={<Avatar id={device.id} name={device.name} type="Device" />} title={device.name} />
+        <CardHeader avatar={<Avatar uuid={device.id} alias={device.name} kind="Device" />} title={device.name} />
         <CardContent>
           <Badge
             color="secondary"
