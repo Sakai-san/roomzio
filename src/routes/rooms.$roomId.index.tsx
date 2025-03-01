@@ -22,11 +22,12 @@ import { Avatar as MUIAvatar } from "@mui/material";
 import { Avatar } from "../components/Avatar";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LockIcon from "@mui/icons-material/Lock";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
   component: RoomDetail,
-  pendingComponent: <Circular />,
+  pendingComponent: CircularProgress,
 });
 
 interface ExpandMoreProps extends IconButtonProps {
