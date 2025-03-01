@@ -25,7 +25,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} defaultPreload="intent" />
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </StrictMode>
   );
