@@ -153,7 +153,9 @@ function RoomDetail() {
           </CardActions>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
-              <Typography sx={{ marginBottom: 2 }}>Booked by:</Typography>
+              <Typography sx={{ marginBottom: 2 }} variant="body2">
+                Booked by:
+              </Typography>
               <Stack sx={{ marginBottom: 2 }} direction="row" alignItems="center" gap={3}>
                 <MUIAvatar alt={room.booking?.fullName} src={room.booking?.avatar}></MUIAvatar>
                 <Typography>{room.booking?.fullName}</Typography>
