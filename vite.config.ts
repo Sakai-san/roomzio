@@ -7,5 +7,5 @@ export default defineConfig({
   server: {
     port: 3001,
   },
-  plugins: [TanStackRouterVite(), react()],
+  plugins: [TanStackRouterVite({ target: "react", autoCodeSplitting: true }), react()],
 });
