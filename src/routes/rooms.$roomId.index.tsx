@@ -66,8 +66,8 @@ function RoomDetail() {
     open: boolean;
   }>({ open: false });
 
-  const { mutate: mutateBook } = useMutation({ mutationFn: postBook });
-  const { mutate: mutateRelease } = useMutation({ mutationFn: postRelease });
+  const { mutate: mutateBook, isPending: isPendingBook } = useMutation({ mutationFn: postBook });
+  const { mutate: mutateRelease, isPending: isPendingRelease } = useMutation({ mutationFn: postRelease });
 
   const mutationOption = {
     onSuccess: async (response: Response) => {
@@ -129,11 +129,19 @@ function RoomDetail() {
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="book a room" onClick={() => mutateBook(roomId, mutationOption)}>
+            <IconButton
+              disabled={isPendingBook}
+              aria-label="book a room"
+              onClick={() => mutateBook(roomId, mutationOption)}
+            >
               <LockIcon />
             </IconButton>
 
-            <IconButton aria-label="release a room" onClick={() => mutateRelease(roomId, mutationOption)}>
+            <IconButton
+              disabled={isPendingRelease}
+              aria-label="release a room"
+              onClick={() => mutateRelease(roomId, mutationOption)}
+            >
               <LockOpenIcon />
             </IconButton>
 
@@ -156,7 +164,7 @@ function RoomDetail() {
       </Stack>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        open={!!notification.message && notification.open}
+        open={notification.open}
         autoHideDuration={3000}
         onClose={handleClose}
         key={JSON.stringify(notification)}
