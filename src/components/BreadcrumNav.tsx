@@ -2,30 +2,26 @@ import Box from "@mui/material/Box";
 import { isMatch, Link, useMatches, useMatchRoute, useMatch, rootRouteId } from "@tanstack/react-router";
 
 export const BreadcrumbNav = () => {
-  const match = useMatch({ from: rootRouteId });
-  const matches = useMatches();
-  const matchRoute = useMatchRoute();
+  const roomMatch = useMatch({ from: "/rooms/$roomId/", shouldThrow: false });
+  const bookMatch = useMatch({ from: "/rooms/$roomId/devices/$deviceId", shouldThrow: false });
 
-  const roomRoute = matches.filter((match) => match.fullPath === "/rooms/$roomId/");
-  const bookingRoute = matches.filter((match) => match.fullPath === "/rooms/$roomId/devices/$deviceId");
-
-  const items =
-    bookingRoute.length > 0
-      ? [{ label: "room", href: `/rooms/${match.params.roomId}` }].concat(
-          bookingRoute.map(({ pathname, loaderData }) => {
-            return {
-              label: loaderData?.name,
-            };
-          })
-        )
-      : roomRoute.map(({ pathname, loaderData }) => {
+  const items = bookMatch
+    ? [{ label: "room", href: `/rooms/${bookMatch.params.roomId}` }].concat(
+        [bookMatch].map(({ loaderData }) => {
           return {
             label: loaderData?.name,
           };
-        });
+        })
+      )
+    : [roomMatch].map(({ loaderData }) => {
+        return {
+          label: loaderData?.name,
+        };
+      });
 
   console.group("BreadcrumbNav");
-  console.log("matches", matches);
+  console.log("roomMatch", roomMatch);
+  console.log("bookMatch", bookMatch);
   console.groupEnd();
 
   return (
