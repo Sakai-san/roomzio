@@ -25,7 +25,7 @@ export const BreadcrumbNav = () => {
         });
 
   console.group("BreadcrumbNav");
-  console.log("match", match);
+  console.log("matches", matches);
   console.groupEnd();
 
   return (
