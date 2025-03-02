@@ -1,6 +1,4 @@
-import { Fragment } from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Typography from "@mui/material/Typography";
 import { Link, useMatch } from "@tanstack/react-router";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
@@ -20,14 +18,10 @@ export const BreadcrumbNav = () => {
 
   return (
     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
-      {items.map((item, index) => (
-        <Fragment key={index}>
-          {item?.href ? (
-            <Link to={item.href}>{item.label}</Link>
-          ) : (
-            <Typography sx={{ color: "text.primary" }}>{item.label}</Typography>
-          )}
-        </Fragment>
+      {items.map((item) => (
+        <Link disabled={!item?.href} to={item.href}>
+          {item.label}
+        </Link>
       ))}
     </Breadcrumbs>
   );
