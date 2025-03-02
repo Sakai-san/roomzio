@@ -2,6 +2,7 @@ import { Fragment } from "react";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
 import { Link, useMatch } from "@tanstack/react-router";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 export const BreadcrumbNav = () => {
   const deviceMatch = useMatch({ from: "/rooms/$roomId/devices/$deviceId", shouldThrow: false });
@@ -18,7 +19,7 @@ export const BreadcrumbNav = () => {
       : [{ label: "Home", href: "/" }];
 
   return (
-    <Breadcrumbs aria-label="breadcrumb">
+    <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
       {items.map((item, index) => (
         <Fragment key={index}>
           {item?.href ? (
