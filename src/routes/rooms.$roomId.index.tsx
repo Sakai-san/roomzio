@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute, useRouter, useRouterState } from "@tanstack/react-router";
 import { getRoom, postBook, postRelease } from "../api";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
@@ -60,6 +60,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 function RoomDetail() {
   const router = useRouter();
+  const location = useRouterState({ select: (s) => s.location });
   const room = Route.useLoaderData();
   const { roomId } = Route.useParams();
   const [notification, setNotification] = useState<{
