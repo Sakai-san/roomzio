@@ -1,18 +1,10 @@
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import { Link, useMatch, useRouter } from "@tanstack/react-router";
+import { Link, useMatch } from "@tanstack/react-router";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 
 export const BreadcrumbNav = () => {
-  const router = useRouter();
   const deviceMatch = useMatch({ from: "/rooms/$roomId/devices/$deviceId", shouldThrow: false });
   const roomMatch = useMatch({ from: "/rooms/$roomId/", shouldThrow: false });
-
-  //  const test = deviceMatch?.buildPath(deviceMatch?.fullPath, { deviceMatch?.params.roomId });
-
-  console.group("BreadcrumbNav");
-  console.log("roomMatch", roomMatch);
-  // console.log("test", test);
-  console.groupEnd();
 
   const items = deviceMatch
     ? [
@@ -26,8 +18,8 @@ export const BreadcrumbNav = () => {
 
   return (
     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
-      {items.map((item) => (
-        <Link key={item.label} disabled={!item?.href} to={item.href}>
+      {items.map((item, index) => (
+        <Link key={index} disabled={!item?.href} to={item.href}>
           {item.label}
         </Link>
       ))}
