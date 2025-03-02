@@ -50,11 +50,12 @@ function DeviceDetail() {
         <CardHeader avatar={<Avatar uuid={device.id} alias={device.name} kind="Device" />} title={device.name} />
         <CardContent>
           <Badge
+            max={100}
             color="secondary"
             badgeContent={device.battery}
             sx={{
               "& .MuiBadge-badge": {
-                right: -5,
+                right: -8,
               },
             }}
           >
