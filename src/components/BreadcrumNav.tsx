@@ -3,8 +3,8 @@ import Typography from "@mui/material/Typography";
 import { Link, useMatch } from "@tanstack/react-router";
 
 export const BreadcrumbNav = () => {
-  const roomMatch = useMatch({ from: "/rooms/$roomId/", shouldThrow: false });
   const deviceMatch = useMatch({ from: "/rooms/$roomId/devices/$deviceId", shouldThrow: false });
+  const roomMatch = useMatch({ from: "/rooms/$roomId/", shouldThrow: false });
 
   const items = deviceMatch
     ? [
