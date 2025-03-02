@@ -13,7 +13,7 @@ export const BreadcrumbNav = () => {
           };
         })
       )
-    : [roomMatch].map(({ loaderData }) => {
+    : (roomMatch ? [roomMatch] : []).map(({ loaderData }) => {
         return {
           label: loaderData?.name,
         };
