@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { Link, useMatch, useMatches } from "@tanstack/react-router";
+import { Link, useMatch } from "@tanstack/react-router";
 
 export const BreadcrumbNav = () => {
   const roomMatch = useMatch({ from: "/rooms/$roomId/", shouldThrow: false });
