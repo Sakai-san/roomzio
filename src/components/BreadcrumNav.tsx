@@ -1,4 +1,5 @@
-import Box from "@mui/material/Box";
+import { Fragment } from "react";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
 import { Link, useMatch } from "@tanstack/react-router";
 
@@ -17,18 +18,16 @@ export const BreadcrumbNav = () => {
       : [{ label: "Home", href: "/" }];
 
   return (
-    <div>
-      <Box component="ul" sx={{ listStyleType: "none", display: "flex", gap: 5 }}>
-        {items.map((item, index) => (
-          <li key={index}>
-            {item?.href ? (
-              <Link to={item.href}>{item.label}</Link>
-            ) : (
-              <Typography sx={{ color: "text.primary" }}>{item.label}</Typography>
-            )}
-          </li>
-        ))}
-      </Box>
-    </div>
+    <Breadcrumbs aria-label="breadcrumb">
+      {items.map((item, index) => (
+        <Fragment key={index}>
+          {item?.href ? (
+            <Link to={item.href}>{item.label}</Link>
+          ) : (
+            <Typography sx={{ color: "text.primary" }}>{item.label}</Typography>
+          )}
+        </Fragment>
+      ))}
+    </Breadcrumbs>
   );
 };
