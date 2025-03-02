@@ -2,44 +2,22 @@ import Box from "@mui/material/Box";
 import { Link, useMatch, useMatches } from "@tanstack/react-router";
 
 export const BreadcrumbNav = () => {
-  const rootMatch = useMatch({ from: "/", shouldThrow: false });
   const roomMatch = useMatch({ from: "/rooms/$roomId/", shouldThrow: false });
   const deviceMatch = useMatch({ from: "/rooms/$roomId/devices/$deviceId", shouldThrow: false });
 
-  const paths = [deviceMatch, roomMatch, rootMatch] as const;
-  const links = [
-    (routeMatching: (typeof paths)[0]) => ({
-      href: routeMatching?.pathname,
-      label: routeMatching?.loaderData?.name,
-    }),
-
-    (routeMatching: (typeof paths)[1]) => ({
-      href: routeMatching?.pathname,
-      label: "Room",
-    }),
-
-    (routeMatching: (typeof paths)[2]) => ({
-      href: routeMatching?.pathname,
-      label: "Home",
-    }),
-  ];
-
-  const indexStart = paths.findIndex((path) => path);
-  const its = paths.slice(indexStart).sort();
-
   const items = deviceMatch
-    ? [{ label: "room", href: `/rooms/${deviceMatch.params.roomId}` }].concat(
+    ? [{ label: "Room", href: `/rooms/${deviceMatch.params.roomId}` }].concat(
         [deviceMatch].map(({ loaderData }) => {
           return {
             label: loaderData?.name,
           };
         })
       )
-    : (roomMatch ? [roomMatch] : []).map(({ loaderData }) => {
-        return {
+    : roomMatch
+      ? [roomMatch].map(({ loaderData }) => ({
           label: loaderData?.name,
-        };
-      });
+        }))
+      : [{ label: "Home", href: "/" }];
 
   return (
     <div>
