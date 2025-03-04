@@ -10,6 +10,10 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Divider from "@mui/material/Divider";
 import { ButtonLink } from "../components/ButtonLink";
 import { Avatar } from "../components/Avatar";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 
 export const Route = createFileRoute("/")({
   loader: getRooms,
@@ -44,6 +48,21 @@ function Index() {
             <ListItemIcon>
               {room.busy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
             </ListItemIcon>
+
+            <PopupState variant="popover" popupId="demo-popup-menu">
+              {(popupState) => (
+                <Fragment>
+                  <Button variant="contained" {...bindTrigger(popupState)}>
+                    Dashboard
+                  </Button>
+                  <Menu {...bindMenu(popupState)}>
+                    <MenuItem onClick={popupState.close}>Profile</MenuItem>
+                    <MenuItem onClick={popupState.close}>My account</MenuItem>
+                    <MenuItem onClick={popupState.close}>Logout</MenuItem>
+                  </Menu>
+                </Fragment>
+              )}
+            </PopupState>
           </ButtonLink>
           {index !== rooms.length - 1 && <Divider variant="inset" component="li" />}
         </Fragment>
