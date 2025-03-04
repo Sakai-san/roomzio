@@ -65,6 +65,19 @@ app.get("/rooms/:roomId", (req: Request, res: Response) => {
   });
 });
 
+// Delete room
+app.delete("/rooms/:roomId", (req: Request, res: Response) => {
+  const room = rooms.find((r) => r.id === req.params.roomId);
+  if (!room) {
+    res.status(404).json({ error: "Room not found" });
+    return;
+  }
+  res.json({
+    ...room,
+    devices: room.devices.map(({ id, name, type }) => ({ id, name, type })),
+  });
+});
+
 // Get device details
 app.get("/devices/:deviceId", (req: Request, res: Response) => {
   const device = rooms.flatMap((r) => r.devices).find((d) => d.id === req.params.deviceId);
