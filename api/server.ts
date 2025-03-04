@@ -26,7 +26,7 @@ export interface Room {
 }
 
 // Generate mock rooms
-const rooms: Room[] = Array.from({ length: 100 }, (_, i) => {
+let rooms: Room[] = Array.from({ length: 100 }, (_, i) => {
   const devices: Device[] = Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, (_, d) => ({
     id: faker.string.uuid(),
     type: "Display",
@@ -68,14 +68,12 @@ app.get("/rooms/:roomId", (req: Request, res: Response) => {
 // Delete room
 app.delete("/rooms/:roomId", (req: Request, res: Response) => {
   const room = rooms.find((r) => r.id === req.params.roomId);
+  rooms = rooms.filter((r) => r.id !== req.params.roomId);
   if (!room) {
     res.status(404).json({ error: "Room not found" });
     return;
   }
-  res.json({
-    ...room,
-    devices: room.devices.map(({ id, name, type }) => ({ id, name, type })),
-  });
+  res.json({ message: `Room ${room.name} delete successfully` });
 });
 
 // Get device details
