@@ -77,7 +77,7 @@ app.delete("/rooms/:roomId", (req: Request, res: Response) => {
 });
 
 // Patch room
-app.delete("/rooms/:roomId", (req: Request, res: Response) => {
+app.patch("/rooms/:roomId", (req: Request, res: Response) => {
   const room = rooms.find((r) => r.id === req.params.roomId);
   rooms = rooms.filter((r) => r.id !== req.params.roomId);
   if (!room) {
