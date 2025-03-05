@@ -73,7 +73,7 @@ app.delete("/rooms/:roomId", (req: Request, res: Response) => {
     res.status(404).json({ error: "Room not found" });
     return;
   }
-  res.json({ message: `Room ${room.name} delete successfully` });
+  res.json({ message: `Room ${room.name} deleted successfully` });
 });
 
 // Get device details
