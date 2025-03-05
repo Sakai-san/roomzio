@@ -76,6 +76,17 @@ app.delete("/rooms/:roomId", (req: Request, res: Response) => {
   res.json({ message: `Room ${room.name} deleted successfully` });
 });
 
+// Patch room
+app.delete("/rooms/:roomId", (req: Request, res: Response) => {
+  const room = rooms.find((r) => r.id === req.params.roomId);
+  rooms = rooms.filter((r) => r.id !== req.params.roomId);
+  if (!room) {
+    res.status(404).json({ error: "Room not found" });
+    return;
+  }
+  res.json({ message: `Room ${room.name} deleted successfully` });
+});
+
 // Get device details
 app.get("/devices/:deviceId", (req: Request, res: Response) => {
   const device = rooms.flatMap((r) => r.devices).find((d) => d.id === req.params.deviceId);
