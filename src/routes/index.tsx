@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { deleteRoom, getRooms } from "../api";
+import { deleteRoom, getRooms, patchRoom } from "../api";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -34,6 +34,7 @@ function Index() {
     open: boolean;
   }>({ open: false });
   const { mutate: mutateDeletion, isPending: isPendingDelete } = useMutation({ mutationFn: deleteRoom });
+  const { mutate: mutateRename, isPending: isPendingPatch } = useMutation({ mutationFn: patchRoom });
 
   const mutationOption = {
     onSuccess: async (response: Response) => {
@@ -87,7 +88,22 @@ function Index() {
                       >
                         Delete
                       </MenuItem>
-                      <MenuItem onClick={popupState.close}>Rename</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          mutateRename(
+                            {
+                              roomId: room.id,
+                              payload: {
+                                name: "morge",
+                              },
+                            },
+                            mutationOption
+                          );
+                          popupState.close();
+                        }}
+                      >
+                        Rename
+                      </MenuItem>
                     </Menu>
                   </Fragment>
                 )}
