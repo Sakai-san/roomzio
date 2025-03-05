@@ -33,7 +33,7 @@ function Index() {
     severity?: AlertProps["severity"];
     open: boolean;
   }>({ open: false });
-  const { mutate, isPending: isPendingDelete } = useMutation({ mutationFn: deleteRoom });
+  const { mutate: mutateDeletion, isPending: isPendingDelete } = useMutation({ mutationFn: deleteRoom });
 
   const mutationOption = {
     onSuccess: async (response: Response) => {
@@ -81,7 +81,7 @@ function Index() {
                     <Menu {...bindMenu(popupState)}>
                       <MenuItem
                         onClick={() => {
-                          mutate(room.id, mutationOption);
+                          mutateDeletion(room.id, mutationOption);
                           popupState.close();
                         }}
                       >

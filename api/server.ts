@@ -78,13 +78,15 @@ app.delete("/rooms/:roomId", (req: Request, res: Response) => {
 
 // Patch room
 app.patch("/rooms/:roomId", (req: Request, res: Response) => {
-  const room = rooms.find((r) => r.id === req.params.roomId);
-  rooms = rooms.filter((r) => r.id !== req.params.roomId);
-  if (!room) {
+  const roomIndex = rooms.findIndex((r) => r.id === req.params.roomId);
+
+  rooms = rooms.map((r, index) => (index === roomIndex ? { ...r, ...req.params.body } : r));
+
+  if (!roomIndex) {
     res.status(404).json({ error: "Room not found" });
     return;
   }
-  res.json({ message: `Room ${room.name} deleted successfully` });
+  res.json({ message: `Room ${rooms[roomIndex].id} updated successfully` });
 });
 
 // Get device details
