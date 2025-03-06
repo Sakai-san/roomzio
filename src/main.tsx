@@ -9,7 +9,7 @@ import { routeTree } from "./routeTree.gen";
 const queryClient = new QueryClient();
 
 // Create a new router instance
-const router = createRouter({ routeTree, defaultPreload: "intent", scrollRestoration: true });
+const router = createRouter({ routeTree, scrollRestoration: true });
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
