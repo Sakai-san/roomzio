@@ -93,7 +93,7 @@ function Index() {
                           mutateRename(
                             {
                               roomId: room.id,
-                              payload: {
+                              body: {
                                 name: "morge",
                               },
                             },
