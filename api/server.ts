@@ -1,12 +1,10 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import { faker } from "@faker-js/faker";
-import bodyParser from "body-parser";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.json());
 
 export interface Device {
   id: string;
@@ -81,16 +79,15 @@ app.delete("/rooms/:roomId", (req: Request, res: Response) => {
 // Patch room
 app.patch("/rooms/:roomId", (req: Request, res: Response) => {
   const roomIndex = rooms.findIndex((r) => r.id === req.params.roomId);
-
-  res.json({ name: "hello", ...req.body });
+  const currentName = rooms[roomIndex].name;
 
   rooms = rooms.map((r, index) => (index === roomIndex ? { ...r, ...req.body } : r));
 
-  if (!roomIndex) {
+  if (roomIndex === -1) {
     res.status(404).json({ error: "Room not found" });
     return;
   }
-  res.json({ message: `Room ${rooms[roomIndex].id} updated successfully` });
+  res.json({ message: `${currentName} updated successfully to ${rooms[roomIndex].name}` });
 });
 
 // Get device details
