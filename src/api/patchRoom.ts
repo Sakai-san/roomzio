@@ -8,10 +8,8 @@ export const patchRoom = async <N extends string>(payload: {
 }) =>
   fetch(`http://localhost:3000/rooms/${payload.roomId}`, {
     method: "PATCH",
-
     headers: {
       "Content-Type": "application/json",
     },
-
     body: JSON.stringify(payload.body),
   });
