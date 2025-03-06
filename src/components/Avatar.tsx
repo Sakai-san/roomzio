@@ -10,7 +10,7 @@ type AvtarProps = {
 };
 
 export const Avatar: FC<AvtarProps> = ({ uuid, alias, kind }) => {
-  const names = words(alias);
+  const aliases = words(alias);
   return (
     <MUIAvatar
       sx={{
@@ -19,7 +19,7 @@ export const Avatar: FC<AvtarProps> = ({ uuid, alias, kind }) => {
       alt={`${kind} avatar ${alias}`}
       aria-label={kind}
     >
-      {`${names[0].at(0)} ${names[1].at(0)}`}
+      {`${aliases?.[0]?.at(0)} ${aliases?.[1]?.at(0)}`}
     </MUIAvatar>
   );
 };
