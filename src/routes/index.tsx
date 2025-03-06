@@ -117,6 +117,9 @@ function Index() {
                 roomId: room.id,
               }}
             >
+              <ListItemAvatar>
+                <Avatar uuid={room.id} alias={room.name} kind="Room" />
+              </ListItemAvatar>
               <ListItemText primary={room.name} />
               <ListItemIcon>
                 {room.busy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
