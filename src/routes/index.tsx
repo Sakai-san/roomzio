@@ -72,8 +72,7 @@ function Index() {
           <ListItem
             disablePadding
             key={room.id}
-
-            /*            secondaryAction={
+            secondaryAction={
               <PopupState variant="popover" popupId="demo-popup-menu">
                 {(popupState) => (
                   <Fragment>
@@ -108,8 +107,8 @@ function Index() {
                     </Menu>
                   </Fragment>
                 )}
-              </PopupState>}
-              */
+              </PopupState>
+            }
           >
             <ButtonLink
               disabled={isPendingDelete}
@@ -118,30 +117,13 @@ function Index() {
                 roomId: room.id,
               }}
             >
-              <ListItemAvatar>
-                <Avatar uuid={room.id} alias={room.name} kind="Room" />
-              </ListItemAvatar>
               <ListItemText primary={room.name} />
               <ListItemIcon>
                 {room.busy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
               </ListItemIcon>
             </ButtonLink>
-            <IconButton
-              onClick={(e) => {
-                mutateRename(
-                  {
-                    roomId: room.id,
-                    body: {
-                      name: "morge",
-                    },
-                  },
-                  mutationOption
-                );
-              }}
-            >
-              Rename
-            </IconButton>
-            {index !== rooms.length - 1 && <Divider variant="inset" component="li" />}
+            {/*index !== rooms.length - 1 && <Divider variant="inset" component="li" />
+             */}
           </ListItem>
         ))}
       </List>
