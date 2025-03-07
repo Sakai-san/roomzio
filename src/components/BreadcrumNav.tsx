@@ -19,7 +19,7 @@ export const BreadcrumbNav = () => {
       ? [{ label: "Home", href: "/", onClick }, { label: roomMatch.loaderData?.name }]
       : [{ label: "Home", href: "/", onClick }];
 
-  console.log("router", router);
+  console.log("history", router.history.length);
   return (
     <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
       {items.map((item, index) => {
