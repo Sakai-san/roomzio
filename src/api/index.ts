@@ -1,6 +1,4 @@
-export { getRooms } from "./getRooms";
-export { getRoom } from "./getRoom";
-export { deleteRoom } from "./deleteRoom";
+export * from "./rooms";
 export { getDevice } from "./getDevice";
 export { postRelease } from "./postRelease";
 export { postBook } from "./postBook";
