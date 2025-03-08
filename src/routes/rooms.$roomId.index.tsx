@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { getRoom, postBook, postRelease } from "../api";
+import { getRoom, postBooking, postRelease } from "../api";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -68,7 +68,7 @@ function RoomDetail() {
     open: boolean;
   }>({ open: false });
 
-  const { mutate: mutateBook, isPending: isPendingBook } = useMutation({ mutationFn: postBook });
+  const { mutate: mutateBook, isPending: isPendingBook } = useMutation({ mutationFn: postBooking });
   const { mutate: mutateRelease, isPending: isPendingRelease } = useMutation({ mutationFn: postRelease });
 
   const mutationOption = {
