@@ -19,6 +19,8 @@ import ListItem from "@mui/material/ListItem";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import { useMutation } from "@tanstack/react-query";
 import Alert, { AlertProps } from "@mui/material/Alert/Alert";
+import { TransitionGroup } from "react-transition-group";
+import Collapse from "@mui/material/Collapse";
 
 export const Route = createFileRoute("/")({
   loader: getRooms,
@@ -68,67 +70,70 @@ function Index() {
         }}
         component="nav"
       >
-        {rooms.map((room, index) => (
-          <ListItem
-            disablePadding
-            key={room.id}
-            secondaryAction={
-              <PopupState variant="popover" popupId="demo-popup-menu">
-                {(popupState) => (
-                  <Fragment>
-                    <IconButton edge="end" aria-label="more" {...bindTrigger(popupState)}>
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu {...bindMenu(popupState)}>
-                      <MenuItem
-                        onClick={() => {
-                          mutateDeletion(room.id, mutationOption);
-                          popupState.close();
-                        }}
-                      >
-                        Delete
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          mutateRename(
-                            {
-                              roomId: room.id,
-                              body: {
-                                name: "morge",
-                              },
-                            },
-                            mutationOption
-                          );
-                          popupState.close();
-                        }}
-                      >
-                        Rename
-                      </MenuItem>
-                    </Menu>
-                  </Fragment>
-                )}
-              </PopupState>
-            }
-          >
-            <ButtonLink
-              disabled={isPendingDelete}
-              to="/rooms/$roomId"
-              params={{
-                roomId: room.id,
-              }}
-            >
-              <ListItemAvatar>
-                <Avatar uuid={room.id} alias={room.name} kind="Room" />
-              </ListItemAvatar>
-              <ListItemText primary={room.name} />
-              <ListItemIcon>
-                {room.busy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
-              </ListItemIcon>
-            </ButtonLink>
-            {/*index !== rooms.length - 1 && <Divider variant="inset" component="li" />
-             */}
-          </ListItem>
-        ))}
+        <TransitionGroup>
+          {rooms.map((room, index) => (
+            <Collapse key={room.id}>
+              <ListItem
+                disablePadding
+                secondaryAction={
+                  <PopupState variant="popover" popupId="demo-popup-menu">
+                    {(popupState) => (
+                      <Fragment>
+                        <IconButton edge="end" aria-label="more" {...bindTrigger(popupState)}>
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu {...bindMenu(popupState)}>
+                          <MenuItem
+                            onClick={() => {
+                              mutateDeletion(room.id, mutationOption);
+                              popupState.close();
+                            }}
+                          >
+                            Delete
+                          </MenuItem>
+                          <MenuItem
+                            onClick={() => {
+                              mutateRename(
+                                {
+                                  roomId: room.id,
+                                  body: {
+                                    name: "morge",
+                                  },
+                                },
+                                mutationOption
+                              );
+                              popupState.close();
+                            }}
+                          >
+                            Rename
+                          </MenuItem>
+                        </Menu>
+                      </Fragment>
+                    )}
+                  </PopupState>
+                }
+              >
+                <ButtonLink
+                  disabled={isPendingDelete}
+                  to="/rooms/$roomId"
+                  params={{
+                    roomId: room.id,
+                  }}
+                >
+                  <ListItemAvatar>
+                    <Avatar uuid={room.id} alias={room.name} kind="Room" />
+                  </ListItemAvatar>
+                  <ListItemText primary={room.name} />
+                  <ListItemIcon>
+                    {room.busy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
+                  </ListItemIcon>
+                </ButtonLink>
+                {/*index !== rooms.length - 1 && <Divider variant="inset" component="li" />
+                 */}
+              </ListItem>
+            </Collapse>
+          ))}
+        </TransitionGroup>
       </List>
       <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
