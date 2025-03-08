@@ -1,4 +1,4 @@
 export * from "./rooms";
-export { getDevice } from "./getDevice";
-export { postRelease } from "./postRelease";
+export * from "./devices";
+export * from "./releases";
 export { postBook } from "./postBook";
