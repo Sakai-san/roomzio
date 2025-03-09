@@ -21,6 +21,7 @@ import { useMutation } from "@tanstack/react-query";
 import Alert, { AlertProps } from "@mui/material/Alert/Alert";
 import { TransitionGroup } from "react-transition-group";
 import Collapse from "@mui/material/Collapse";
+import Pagination from "@mui/material/Pagination";
 
 export const Route = createFileRoute("/")({
   loader: getRooms,
@@ -146,6 +147,8 @@ function Index() {
           {notification.message}
         </Alert>
       </Snackbar>
+
+      <Pagination count={rooms.count} color="primary" />
     </>
   );
 }

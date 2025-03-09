@@ -67,7 +67,10 @@ app.get("/rooms", (req: Request, res: Response) => {
   const sanitizedPage = parseInt(page, 10) || 1;
   const paginatedRooms = paginate(rooms, SIZE, sanitizedPage);
 
-  res.json(paginatedRooms.map(({ id, name, booking }) => ({ id, name, busy: !!booking })));
+  res.json({
+    count: Math.floor(rooms.length / SIZE),
+    rooms: paginatedRooms.map(({ id, name, booking }) => ({ id, name, busy: !!booking })),
+  });
 });
 
 // Get room details
