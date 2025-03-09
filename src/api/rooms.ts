@@ -22,12 +22,10 @@ const patchRoom = async <N extends string>(payload: {
   });
 
 async function getRooms(page: number = 1): Promise<{ count: number; rooms: Array<RoomType> }> {
-  const rooms = await fetch("http://localhost:3000/rooms", {
-    method: "GET",
+  const rooms = await fetch(`http://localhost:3000/rooms?page=${page}`, {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
     },
-    body: JSON.stringify({ page }),
   });
 
   const json = await rooms.json();
