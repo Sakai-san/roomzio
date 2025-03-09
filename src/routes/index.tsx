@@ -155,7 +155,15 @@ function Index() {
       <Pagination
         count={data.count}
         color="primary"
-        renderItem={(item) => <ButtonLink to={`/rooms${item.page === 1 ? "" : `?page=${item.page}`}`} {...item} />}
+        renderItem={(item) => (
+          <ButtonLink
+            to="/rooms/$roomId"
+            search={{
+              page: item.page,
+            }}
+            {...item}
+          />
+        )}
       />
     </>
   );
