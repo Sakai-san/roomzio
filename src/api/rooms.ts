@@ -16,13 +16,19 @@ const patchRoom = async <N extends string>(payload: {
   fetch(`http://localhost:3000/rooms/${payload.roomId}`, {
     method: "PATCH",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json; charset=utf-8",
     },
     body: JSON.stringify(payload.body),
   });
 
-async function getRooms(): Promise<Array<RoomType>> {
-  const rooms = await fetch("http://localhost:3000/rooms");
+async function getRooms(page: number): Promise<{ count: number; rooms: Array<RoomType> }> {
+  const rooms = await fetch("http://localhost:3000/rooms", {
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify({ page }),
+  });
+
   const json = await rooms.json();
   return json;
 }

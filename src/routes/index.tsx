@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const router = useRouter();
-  const rooms = Route.useLoaderData();
+  const data = Route.useLoaderData();
   const [notification, setNotification] = useState<{
     message?: string;
     severity?: AlertProps["severity"];
@@ -72,7 +72,7 @@ function Index() {
         component="nav"
       >
         <TransitionGroup>
-          {rooms.map((room, index) => (
+          {data.rooms.map((room, index) => (
             <Collapse key={room.id}>
               <ListItem
                 disablePadding
@@ -148,7 +148,7 @@ function Index() {
         </Alert>
       </Snackbar>
 
-      <Pagination count={rooms.count} color="primary" />
+      <Pagination count={data.count} color="primary" />
     </>
   );
 }
