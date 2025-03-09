@@ -24,7 +24,11 @@ import Collapse from "@mui/material/Collapse";
 import Pagination from "@mui/material/Pagination";
 
 export const Route = createFileRoute("/")({
-  loader: ({ context: { page } }) => getRooms(page),
+  loader: ({
+    location: {
+      search: { page },
+    },
+  }) => getRooms(page),
   component: Index,
 });
 

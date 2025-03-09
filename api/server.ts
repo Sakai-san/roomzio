@@ -63,7 +63,7 @@ let rooms = roomsData;
 
 // List all rooms
 app.get("/rooms", (req: Request, res: Response) => {
-  const page = req.params.page;
+  const page = req.query.page;
   const sanitizedPage = parseInt(page, 10) || 1;
   const paginatedRooms = paginate(rooms, SIZE, sanitizedPage);
 
