@@ -24,7 +24,7 @@ import Collapse from "@mui/material/Collapse";
 import Pagination from "@mui/material/Pagination";
 
 export const Route = createFileRoute("/")({
-  loader: getRooms,
+  loader: ({ context: { page } }) => getRooms(page),
   component: Index,
 });
 
@@ -148,7 +148,11 @@ function Index() {
         </Alert>
       </Snackbar>
 
-      <Pagination count={data.count} color="primary" />
+      <Pagination
+        count={data.count}
+        color="primary"
+        renderItem={(item) => <ButtonLink to={`/rooms${item.page === 1 ? "" : `?page=${item.page}`}`} {...item} />}
+      />
     </>
   );
 }
