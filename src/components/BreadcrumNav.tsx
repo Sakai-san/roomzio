@@ -1,10 +1,16 @@
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import { Link, useMatch } from "@tanstack/react-router";
+import { Link, MatchRoute, useMatch, useMatchRoute } from "@tanstack/react-router";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { useEffect } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const BreadcrumbNav = () => {
-  const deviceMatch = useMatch({ from: "/rooms/$roomId/devices/$deviceId", shouldThrow: false });
+  const deviceMatch = useMatch({
+    from: "/rooms/$roomId/devices/$deviceId",
+    shouldThrow: false,
+  });
   const roomMatch = useMatch({ from: "/rooms/$roomId/", shouldThrow: false });
+  const matchRoute = useMatchRoute();
 
   const items = deviceMatch
     ? [
