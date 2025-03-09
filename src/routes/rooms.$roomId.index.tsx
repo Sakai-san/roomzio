@@ -104,8 +104,6 @@ function RoomDetail() {
     setNotification({ open: false });
   };
 
-  console.log("router", router);
-
   return (
     <>
       <Stack alignItems="center" width="100%">
