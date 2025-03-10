@@ -11,7 +11,7 @@ app.use(express.json());
 const sleep = (ms: number) => new Promise((resolve, reject) => setTimeout(() => resolve(), ms));
 const SIZE = 20;
 
-function paginate(collection: Array<any>, pageSize: number, pageNumber: number) {
+function paginate<E>(collection: Array<E>, pageSize: number, pageNumber: number) {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
   return collection.slice((pageNumber - 1) * pageSize, pageNumber * pageSize);
 }
