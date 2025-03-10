@@ -152,19 +152,7 @@ function Index() {
         </Alert>
       </Snackbar>
 
-      <Pagination
-        count={data.count}
-        color="primary"
-        renderItem={(item) => (
-          <ButtonLink
-            to="/rooms/$roomId"
-            search={{
-              page: item.page,
-            }}
-            {...item}
-          />
-        )}
-      />
+      <Pagination count={data.count} color="primary" />
     </>
   );
 }

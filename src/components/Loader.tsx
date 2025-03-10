@@ -3,9 +3,9 @@ import LinearProgress from "@mui/material/LinearProgress";
 import { useRouterState } from "@tanstack/react-router";
 
 export const Loader = () => {
-  const state = useRouterState();
+  const isLoading = useRouterState({ select: (s) => s.status === "pending" });
 
-  return state.status === "pending" ? (
+  return isLoading ? (
     <LinearProgress
       color="inherit"
       sx={{
