@@ -23,6 +23,7 @@ import { TransitionGroup } from "react-transition-group";
 import Collapse from "@mui/material/Collapse";
 import Pagination from "@mui/material/Pagination";
 import { z } from "zod";
+import Stack from "@mui/material/Stack";
 
 export const Route = createFileRoute("/")({
   validateSearch: z.object({
@@ -91,7 +92,7 @@ function Index() {
   };
 
   return (
-    <>
+    <Stack>
       <List
         dense
         sx={{
@@ -178,7 +179,13 @@ function Index() {
         </Alert>
       </Snackbar>
 
-      <Pagination count={data.count} page={sear.page} color="primary" onChange={goTo} />
-    </>
+      <Pagination
+        sx={{ position: "fixed", bottom: 0, left: 0 }}
+        count={data.count}
+        page={sear.page}
+        color="primary"
+        onChange={goTo}
+      />
+    </Stack>
   );
 }
