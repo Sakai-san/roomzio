@@ -8,7 +8,7 @@ import { Stack } from "@mui/material";
 export const Route = createRootRoute({
   component: () => {
     return (
-      <Container>
+      <>
         <Stack
           sx={{
             position: "sticky",
@@ -22,12 +22,12 @@ export const Route = createRootRoute({
           </Stack>
         </Stack>
 
-        <Stack height="80%" sx={{ overflow: "auto" }}>
+        <Container sx={{ maxHeight: "90vh", overflow: "auto" }}>
           <Outlet />
-        </Stack>
+        </Container>
 
         <TanStackRouterDevtools />
-      </Container>
+      </>
     );
   },
 });

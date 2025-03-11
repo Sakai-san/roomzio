@@ -27,7 +27,7 @@ import Stack from "@mui/material/Stack";
 
 export const Route = createFileRoute("/")({
   validateSearch: z.object({
-    page: z.number().optional(),
+    page: z.number().catch(1),
   }).parse,
   search: {
     // Retain the usersView search param while navigating
