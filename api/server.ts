@@ -9,7 +9,7 @@ app.use(cors());
 app.use(express.json());
 
 const sleep = (ms: number) => new Promise((resolve, reject) => setTimeout(() => resolve(), ms));
-const SIZE = 20;
+const SIZE = 50;
 
 function paginate<E>(collection: Array<E>, pageSize: number, pageNumber: number) {
   // human-readable page numbers usually start with 1, so we reduce 1 in the first argument

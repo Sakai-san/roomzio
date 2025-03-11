@@ -3,12 +3,13 @@ import { createRootRoute, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { BreadcrumbNav } from "../components/BreadcrumNav";
 import { Loader } from "../components/Loader";
-import { Stack } from "@mui/material";
+import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 
 export const Route = createRootRoute({
   component: () => {
     return (
-      <>
+      <Box sx={{ height: "100vh" }}>
         <Stack
           sx={{
             position: "sticky",
@@ -22,12 +23,12 @@ export const Route = createRootRoute({
           </Stack>
         </Stack>
 
-        <Container sx={{ maxHeight: "90vh", overflow: "auto" }}>
+        <Container sx={{ height: "auto", overflow: "auto" }}>
           <Outlet />
         </Container>
 
         <TanStackRouterDevtools />
-      </>
+      </Box>
     );
   },
 });
