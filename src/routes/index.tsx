@@ -1,5 +1,5 @@
-import { Fragment, useState } from "react";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import React, { Fragment, useState } from "react";
+import { createFileRoute, retainSearchParams, useNavigate, useRouter } from "@tanstack/react-router";
 import { deleteRoom, getRooms, patchRoom } from "../api";
 import List from "@mui/material/List";
 import ListItemText from "@mui/material/ListItemText";
@@ -22,13 +22,22 @@ import Alert, { AlertProps } from "@mui/material/Alert/Alert";
 import { TransitionGroup } from "react-transition-group";
 import Collapse from "@mui/material/Collapse";
 import Pagination from "@mui/material/Pagination";
+import { z } from "zod";
 
 export const Route = createFileRoute("/")({
-  loader: ({
-    location: {
-      search: { page },
-    },
-  }) => getRooms(page),
+  validateSearch: z.object({
+    page: z.number().optional(),
+  }).parse,
+  search: {
+    // Retain the usersView search param while navigating
+    // within or to this route (or it's children!)
+    middlewares: [retainSearchParams(["page"])],
+  },
+  loaderDeps: ({ search }) => ({
+    page: search.page,
+  }),
+
+  loader: (opts) => getRooms(opts.deps.page),
   component: Index,
 });
 
@@ -42,6 +51,23 @@ function Index() {
   }>({ open: false });
   const { mutate: mutateDeletion, isPending: isPendingDelete } = useMutation({ mutationFn: deleteRoom });
   const { mutate: mutateRename, isPending: isPendingPatch } = useMutation({ mutationFn: patchRoom });
+
+  const navigate = useNavigate({ from: Route.fullPath });
+  const sear = Route.useSearch();
+  console.log("sear", sear);
+  const goTo = (event, value) =>
+    console.log("event", event) ||
+    navigate({
+      search: (old) => {
+        console.log("old", old);
+
+        return {
+          ...old,
+          page: parseInt(value || "1", 10),
+        };
+      },
+      replace: true,
+    });
 
   const mutationOption = {
     onSuccess: async (response: Response) => {
@@ -152,7 +178,7 @@ function Index() {
         </Alert>
       </Snackbar>
 
-      <Pagination count={data.count} color="primary" />
+      <Pagination count={data.count} page={sear.page} color="primary" onChange={goTo} />
     </>
   );
 }
