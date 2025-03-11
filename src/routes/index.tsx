@@ -180,7 +180,21 @@ function Index() {
       </Snackbar>
 
       <Pagination
-        sx={{ position: "fixed", bottom: 0, left: 0 }}
+        sx={{
+          paddingTop: "8px",
+          paddingBottom: "8px",
+          backfaceVisibility: "hidden",
+          background: "rgba(36, 36, 36, 0.85)",
+          backdropFilter: "blur(20px)",
+          transform: "translateZ(0px)",
+          position: "fixed",
+          left: 0,
+          zIndex: 1125,
+          width: "100%",
+          bottom: 0,
+          display: "flex",
+          justifyContent: "center",
+        }}
         count={data.count}
         page={sear.page}
         color="primary"

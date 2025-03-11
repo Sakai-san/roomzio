@@ -9,12 +9,20 @@ import Stack from "@mui/material/Stack";
 export const Route = createRootRoute({
   component: () => {
     return (
-      <Box sx={{ height: "100vh" }}>
+      <>
         <Stack
           sx={{
+            paddingTop: "16px",
+            paddingBottom: "16px",
+            backfaceVisibility: "hidden",
+            backgroundColor: "rgba(18, 18, 18, 0.6)",
+            backdropFilter: "blur(50px)",
+            transform: "translateZ(0px)",
             position: "sticky",
             left: 0,
             top: 0,
+            zIndex: "1125",
+            width: "100%",
           }}
         >
           <Stack>
@@ -23,12 +31,20 @@ export const Route = createRootRoute({
           </Stack>
         </Stack>
 
-        <Container sx={{ height: "auto", overflow: "auto" }}>
-          <Outlet />
+        <Container>
+          <Box
+            sx={{
+              flex: 1,
+              padding: "20px",
+              overflowY: "auto",
+            }}
+          >
+            <Outlet />
+          </Box>
         </Container>
 
         <TanStackRouterDevtools />
-      </Box>
+      </>
     );
   },
 });
