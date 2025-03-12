@@ -30,7 +30,6 @@ export const Route = createRootRoute({
             sx={{
               flex: 1,
               overflowY: "auto",
-              padding: "20px",
               marginBottom: 5,
             }}
           >
