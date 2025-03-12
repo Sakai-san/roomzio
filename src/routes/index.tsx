@@ -184,7 +184,6 @@ function Index() {
           paddingTop: "8px",
           paddingBottom: "8px",
           backfaceVisibility: "hidden",
-          background: "rgba(36, 36, 36, 0.85)",
           backdropFilter: "blur(20px)",
           transform: "translateZ(0px)",
           position: "fixed",

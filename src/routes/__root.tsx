@@ -12,31 +12,25 @@ export const Route = createRootRoute({
       <>
         <Stack
           sx={{
-            paddingTop: "16px",
-            paddingBottom: "16px",
-            backfaceVisibility: "hidden",
-            backgroundColor: "rgba(18, 18, 18, 0.6)",
-            backdropFilter: "blur(50px)",
-            transform: "translateZ(0px)",
+            backgroundColor: "#333",
+            color: "#fff",
+            padding: "10px",
+            textAlign: "center",
             position: "sticky",
-            left: 0,
             top: 0,
-            zIndex: "1125",
-            width: "100%",
+            zIndex: 1000,
           }}
         >
-          <Stack>
-            <Loader />
-            <BreadcrumbNav />
-          </Stack>
+          <Loader />
+          <BreadcrumbNav />
         </Stack>
 
         <Container>
           <Box
             sx={{
               flex: 1,
-              padding: "20px",
               overflowY: "auto",
+              padding: "20px",
             }}
           >
             <Outlet />
