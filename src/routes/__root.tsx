@@ -19,6 +19,7 @@ export const Route = createRootRoute({
             zIndex: 1000,
             backfaceVisibility: "hidden",
             backdropFilter: "blur(20px)",
+            backgroundColor: "rgba(18, 18, 18, 0.6)",
           }}
         >
           <Loader />
