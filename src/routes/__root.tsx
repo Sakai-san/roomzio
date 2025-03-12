@@ -12,13 +12,13 @@ export const Route = createRootRoute({
       <>
         <Stack
           sx={{
-            backgroundColor: "#333",
-            color: "#fff",
             padding: "10px",
             textAlign: "center",
             position: "sticky",
             top: 0,
             zIndex: 1000,
+            backfaceVisibility: "hidden",
+            backdropFilter: "blur(20px)",
           }}
         >
           <Loader />
