@@ -31,6 +31,7 @@ export const Route = createRootRoute({
               flex: 1,
               overflowY: "auto",
               padding: "20px",
+              marginBottom: 5,
             }}
           >
             <Outlet />
