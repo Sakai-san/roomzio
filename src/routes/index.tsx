@@ -100,7 +100,7 @@ function Index() {
         component="nav"
       >
         <TransitionGroup>
-          {data.rooms.map((room, index) => (
+          {data.rooms.map((room) => (
             <Collapse key={room.id}>
               <ListItem
                 disablePadding
