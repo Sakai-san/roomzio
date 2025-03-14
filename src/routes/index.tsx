@@ -59,8 +59,6 @@ function Index() {
   const goTo = (_, value: number) =>
     navigate({
       search: (old) => {
-        console.log("old", old);
-
         return {
           ...old,
           page: value,
