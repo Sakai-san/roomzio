@@ -7,7 +7,7 @@ export const Loader = () => {
 
   return isLoading ? (
     <LinearProgress
-      color="inherit"
+      color="info"
       sx={{
         "&": {
           height: 10,

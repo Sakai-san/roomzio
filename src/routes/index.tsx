@@ -56,8 +56,7 @@ function Index() {
   const navigate = useNavigate({ from: Route.fullPath });
   const sear = Route.useSearch();
   console.log("sear", sear);
-  const goTo = (event, value) =>
-    console.log("event", event) ||
+  const goTo = (_, value) =>
     navigate({
       search: (old) => {
         console.log("old", old);
