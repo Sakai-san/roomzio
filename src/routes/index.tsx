@@ -56,14 +56,14 @@ function Index() {
   const navigate = useNavigate({ from: Route.fullPath });
   const sear = Route.useSearch();
   console.log("sear", sear);
-  const goTo = (_, value) =>
+  const goTo = (_, value: number) =>
     navigate({
       search: (old) => {
         console.log("old", old);
 
         return {
           ...old,
-          page: parseInt(value || "1", 10),
+          page: value,
         };
       },
       replace: true,
