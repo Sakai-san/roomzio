@@ -54,8 +54,8 @@ function Index() {
   const { mutate: mutateRename, isPending: isPendingPatch } = useMutation({ mutationFn: patchRoom });
 
   const navigate = useNavigate({ from: Route.fullPath });
-  const sear = Route.useSearch();
-  console.log("sear", sear);
+  const search = Route.useSearch();
+
   const goTo = (_, value: number) =>
     navigate({
       search: (old) => {
@@ -194,7 +194,7 @@ function Index() {
           justifyContent: "center",
         }}
         count={data.count}
-        page={sear.page}
+        page={search.page}
         color="primary"
         onChange={goTo}
       />
