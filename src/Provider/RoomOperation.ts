@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { Fragment, createContext, PropsWithChildren, useContext, useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -12,6 +12,7 @@ interface RoomOperations {
 }
 
 const RoomOperationsContext = createContext<RoomOperations>({} as RoomOperations);
+
 
 function RoomOperationsProvider({ children }: PropsWithChildren) {
   const [pendingRoom, setPendingRoom] = useState<RoomType |undefined>(undefined);
@@ -36,7 +37,7 @@ function RoomOperationsProvider({ children }: PropsWithChildren) {
 
   return (
 
-    <>
+    <Fragment>
     <RoomOperationsContext.Provider value={providerValue}>{children}</RoomOperationsContext.Provider>
     <Dialog
       open={open}
@@ -60,8 +61,8 @@ function RoomOperationsProvider({ children }: PropsWithChildren) {
         </Button>
       </DialogActions>
     </Dialog>
-  </>
-  )
+    </Fragment>
+  );
 }
 
 const useRoomOperations = () => {
