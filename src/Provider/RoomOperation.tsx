@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import { RoomType } from "../api";
 
 interface RoomOperations {
+  handleOpen: (room: RoomType) => void;
   deleteRoom: (room: RoomType) => Promise<void>;
   renameRoom: (room: RoomType) => Promise<void>;
 }
