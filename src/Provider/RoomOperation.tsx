@@ -29,6 +29,10 @@ const RoomOperationsContext = createContext<RoomOperations>({} as RoomOperations
 function RoomOperationsProvider({ children }: PropsWithChildren) {
   const [pendingRoom, setPendingRoom] = useState<RoomType | undefined>(undefined);
 
+  const handleOpen = (room: RoomType) => {
+    setPendingRoom(room);
+  };
+
   const handleClose = () => {
     setPendingRoom(undefined);
   };
@@ -38,10 +42,12 @@ function RoomOperationsProvider({ children }: PropsWithChildren) {
   };
 
   const renameRoom = (room: RoomType) => {
+    setPendingRoom(room);
     return Promise.resolve(undefined);
   };
 
   const providerValue: RoomOperations = {
+    handleOpen,
     deleteRoom,
     renameRoom,
   };

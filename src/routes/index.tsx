@@ -24,6 +24,7 @@ import Collapse from "@mui/material/Collapse";
 import Pagination from "@mui/material/Pagination";
 import { z } from "zod";
 import Stack from "@mui/material/Stack";
+import { useRoomOperations } from "../Provider";
 
 export const Route = createFileRoute("/")({
   validateSearch: z.object({
@@ -52,7 +53,7 @@ function Index() {
   }>({ open: false });
   const { mutate: mutateDeletion, isPending: isPendingDelete } = useMutation({ mutationFn: deleteRoom });
   const { mutate: mutateRename, isPending: isPendingPatch } = useMutation({ mutationFn: patchRoom });
-
+  const { handleOpen } = useRoomOperations();
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
 
@@ -122,6 +123,8 @@ function Index() {
                           </MenuItem>
                           <MenuItem
                             onClick={() => {
+                              handleOpen();
+                              return;
                               mutateRename(
                                 {
                                   roomId: room.id,
