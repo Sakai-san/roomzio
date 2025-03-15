@@ -1,4 +1,4 @@
-import { Fragment, createContext, PropsWithChildren, useContext, useState } from "react";
+import { Fragment, createContext, PropsWithChildren, use, useContext, useState } from "react";
 import Button from "@mui/material/Button";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
@@ -55,7 +55,7 @@ function RoomOperationsProvider({ children }: PropsWithChildren) {
 
   return (
     <Fragment>
-      <RoomOperationsContext.Provider value={providerValue}>{children}</RoomOperationsContext.Provider>
+      <RoomOperationsContext value={providerValue}>{children}</RoomOperationsContext>
       <BootstrapDialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={!!pendingRoom}>
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           Modal title
@@ -97,7 +97,7 @@ function RoomOperationsProvider({ children }: PropsWithChildren) {
 }
 
 const useRoomOperations = () => {
-  const context = useContext(RoomOperationsContext);
+  const context = use(RoomOperationsContext);
   if (!Object.keys(context).length) {
     throw new TypeError(
       "Attempted to use `useRoomOperations` without its context. Did you forget to wrap the application in `RoomOperationsProvider`?"
