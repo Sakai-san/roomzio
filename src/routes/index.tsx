@@ -123,7 +123,8 @@ function Index() {
                           </MenuItem>
                           <MenuItem
                             onClick={() => {
-                              handleOpen();
+                              popupState.close();
+                              handleOpen(room);
                               return;
                               mutateRename(
                                 {
@@ -134,7 +135,6 @@ function Index() {
                                 },
                                 mutationOption
                               );
-                              popupState.close();
                             }}
                           >
                             Rename
