@@ -1,43 +1,86 @@
 import { NonEmptyString } from "../types";
-import { Room } from "../../api/server";
+import { supabase } from "../lib/supabase";
+import { Result } from "@swan-io/boxed";
 
 export type RoomType = {
   id: string;
   name: string;
-  busy: string;
+  busy: boolean;
 };
 
-const patchRoom = async <N extends string>(payload: {
+const SIZE = 50;
+
+const patchRoom = async ({
+  roomId,
+  name,
+}: {
   roomId: string;
-  body: {
-    name: NonEmptyString<N>;
+  name: string;
+}) => {
+  const { data, error } = await supabase
+    .from("rooms")
+    .update({ name })
+    .eq("id", roomId)
+    .select()
+    .single();
+
+  return error ? Result.Error(error) : Result.Ok(data);
+};
+
+async function getRooms(
+  page: number
+): Promise<{ count: number; rooms: Array<RoomType> }> {
+  const from = (page - 1) * SIZE;
+  const to = from + SIZE - 1;
+
+  const {
+    data: rooms,
+    error,
+    count,
+  } = await supabase
+    .from("rooms")
+    .select("id, name, bookerid", { count: "exact" })
+    .range(from, to);
+
+  if (error) throw error;
+
+  const response = {
+    count: Math.ceil((count || 0) / SIZE),
+    rooms: (rooms || []).map(({ id, name, bookerid }) => ({
+      id,
+      name,
+      busy: !!bookerid,
+    })) as Array<RoomType>,
   };
-}) =>
-  fetch(`http://localhost:3000/rooms/${payload.roomId}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    body: JSON.stringify(payload.body),
-  });
 
-async function getRooms(page: number): Promise<{ count: number; rooms: Array<RoomType> }> {
-  const rooms = await fetch(`http://localhost:3000/rooms?page=${page}`, {
-    headers: {
-      "Content-Type": "application/json; charset=utf-8",
-    },
-  });
-
-  const json = await rooms.json();
-  return json;
+  return response;
 }
 
-async function getRoom(id: string): Promise<Room> {
-  const room = await fetch(`http://localhost:3000/rooms/${id}`);
-  const json = await room.json();
-  return json;
+async function getRoom(id: string) {
+  const { data: room, error } = await supabase
+    .from("rooms")
+    .select(
+      `*,
+      devices(id, name, type, batterylevel),
+      users(id, firstname, lastname, avatarpath)
+    `
+    )
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  if (!room) throw new Error("Room not found");
+
+  return room;
 }
 
-const deleteRoom = async (roomId: string) => fetch(`http://localhost:3000/rooms/${roomId}`, { method: "DELETE" });
+const deleteRoom = async (roomId: string) => {
+  const { data, error } = await supabase
+    .from("rooms")
+    .delete()
+    .eq("id", roomId);
+
+  return error ? Result.Error(error) : Result.Ok(data);
+};
 
 export { patchRoom, getRooms, getRoom, deleteRoom };

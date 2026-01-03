@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { getRoom, postBooking, postRelease } from "../api";
+import { getRoom, postBooking } from "../api";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -22,6 +22,7 @@ import { Avatar as MUIAvatar } from "@mui/material";
 import { Avatar } from "../components/Avatar";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LockIcon from "@mui/icons-material/Lock";
+import { Result } from "@swan-io/boxed";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -66,23 +67,39 @@ function RoomDetail() {
     open: boolean;
   }>({ open: false });
 
-  const { mutate: mutateBook, isPending: isPendingBook } = useMutation({ mutationFn: postBooking });
-  const { mutate: mutateRelease, isPending: isPendingRelease } = useMutation({ mutationFn: postRelease });
+  const { mutate: mutateBook, isPending: isPendingBook } = useMutation({
+    mutationFn: postBooking,
+  });
+  const { mutate: mutateRelease, isPending: isPendingRelease } = useMutation({
+    mutationFn: postBooking,
+  });
 
   const mutationOption = {
-    onSuccess: async (response: Response) => {
-      if (response.ok) {
-        const { message } = await response.json();
-        setNotification({ message, open: true });
-        router.invalidate();
-      } else {
-        const { error } = await response.json();
-        setNotification({ message: error, severity: "error", open: true });
-      }
+    onSuccess: async (result: Result<unknown>) => {
+      return result.match({
+        Ok: (value) => {
+          setNotification({
+            message:
+              value?.bookerid === null
+                ? "Room successfully released"
+                : "Room successfully booked",
+            open: true,
+          });
+          router.invalidate();
+        },
+        Error: (error) => {
+          console.error(error);
+          setNotification({
+            message: "Operation has failed",
+            severity: "error",
+            open: true,
+          });
+        },
+      });
     },
   };
 
-  const isRoomOccupied = !!room.booking;
+  const isRoomOccupied = !!room.bookerid;
 
   const [expanded, setExpanded] = useState(false);
 
@@ -94,7 +111,10 @@ function RoomDetail() {
     setExpanded(!expanded);
   };
 
-  const handleClose = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
     if (reason === "clickaway") {
       return;
     }
@@ -109,7 +129,13 @@ function RoomDetail() {
           <CardHeader
             avatar={<Avatar uuid={room.id} alias={room.name} kind="Room" />}
             title={room.name}
-            subheader={isRoomOccupied ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
+            subheader={
+              isRoomOccupied ? (
+                <EventBusyIcon color="error" />
+              ) : (
+                <EventAvailableIcon color="success" />
+              )
+            }
           />
           <CardContent sx={{ mx: 5 }}>
             <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -132,7 +158,15 @@ function RoomDetail() {
             <IconButton
               disabled={isPendingBook}
               aria-label="book a room"
-              onClick={() => mutateBook(roomId, mutationOption)}
+              onClick={() =>
+                mutateBook(
+                  {
+                    roomId: roomId,
+                    userId: "894743a8-66b7-4e4a-b276-12502122f898",
+                  },
+                  mutationOption
+                )
+              }
             >
               <LockIcon />
             </IconButton>
@@ -140,13 +174,20 @@ function RoomDetail() {
             <IconButton
               disabled={isPendingRelease}
               aria-label="release a room"
-              onClick={() => mutateRelease(roomId, mutationOption)}
+              onClick={() =>
+                mutateRelease({ roomId, userId: null }, mutationOption)
+              }
             >
               <LockOpenIcon />
             </IconButton>
 
             {isRoomOccupied && (
-              <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
+              <ExpandMore
+                expand={expanded}
+                onClick={handleExpandClick}
+                aria-expanded={expanded}
+                aria-label="show more"
+              >
                 <ExpandMoreIcon />
               </ExpandMore>
             )}
@@ -156,9 +197,17 @@ function RoomDetail() {
               <Typography sx={{ marginBottom: 2 }} variant="body2">
                 Booked by:
               </Typography>
-              <Stack sx={{ marginBottom: 2 }} direction="row" alignItems="center" gap={3}>
-                <MUIAvatar alt={room.booking?.fullName} src={room.booking?.avatar}></MUIAvatar>
-                <Typography>{room.booking?.fullName}</Typography>
+              <Stack
+                sx={{ marginBottom: 2 }}
+                direction="row"
+                alignItems="center"
+                gap={3}
+              >
+                <MUIAvatar
+                  alt={`${room.users?.firstname} ${room.users?.lastname}`}
+                  src={room.users?.avatarpath}
+                ></MUIAvatar>
+                <Typography>{`${room.users?.firstname} ${room.users?.lastname}`}</Typography>
               </Stack>
             </CardContent>
           </Collapse>
@@ -171,7 +220,12 @@ function RoomDetail() {
         onClose={handleClose}
         key={JSON.stringify(notification)}
       >
-        <Alert onClose={handleClose} severity={notification.severity} variant="filled" sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleClose}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
           {notification.message}
         </Alert>
       </Snackbar>

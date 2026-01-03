@@ -1,9 +1,17 @@
 import { Device } from "../../api/server";
+import { supabase } from "../lib/supabase";
 
 async function getDevice(id: string): Promise<Device> {
-  const device = await fetch(`http://localhost:3000/devices/${id}`);
-  const json = await device.json();
-  return json;
+  const { data: device, error } = await supabase
+    .from("devices")
+    .select("*", { count: "exact" })
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  if (!device) throw new Error("Device not found");
+
+  return device;
 }
 
 export { getDevice };

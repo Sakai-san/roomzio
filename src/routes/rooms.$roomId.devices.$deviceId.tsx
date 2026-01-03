@@ -47,12 +47,15 @@ function DeviceDetail() {
   return (
     <Stack alignItems="center" width="100%">
       <Card sx={{ width: 345 }}>
-        <CardHeader avatar={<Avatar uuid={device.id} alias={device.name} kind="Device" />} title={device.name} />
+        <CardHeader
+          avatar={<Avatar uuid={device.id} alias={device.name} kind="Device" />}
+          title={device.name}
+        />
         <CardContent>
           <Badge
             max={100}
             color="secondary"
-            badgeContent={device.battery}
+            badgeContent={device.batterylevel}
             sx={{
               "& .MuiBadge-badge": {
                 right: -8,

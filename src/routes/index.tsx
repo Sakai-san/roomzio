@@ -1,21 +1,12 @@
-import React, { Fragment, useState } from "react";
-import { createFileRoute, retainSearchParams, useNavigate, useRouter } from "@tanstack/react-router";
+import React, { useState } from "react";
+import {
+  createFileRoute,
+  retainSearchParams,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 import { deleteRoom, getRooms, patchRoom } from "../api";
 import List from "@mui/material/List";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import EventAvailableIcon from "@mui/icons-material/EventAvailable";
-import EventBusyIcon from "@mui/icons-material/EventBusy";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Divider from "@mui/material/Divider";
-import { ButtonLink } from "../components/ButtonLink";
-import { Avatar } from "../components/Avatar";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import IconButton from "@mui/material/IconButton";
-import ListItem from "@mui/material/ListItem";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import { useMutation } from "@tanstack/react-query";
 import Alert, { AlertProps } from "@mui/material/Alert/Alert";
@@ -24,7 +15,8 @@ import Collapse from "@mui/material/Collapse";
 import Pagination from "@mui/material/Pagination";
 import { z } from "zod";
 import Stack from "@mui/material/Stack";
-import { useRoomOperations } from "../Provider";
+import { Result } from "@swan-io/boxed";
+import { RoomRow } from "../components/RomRow";
 
 export const Route = createFileRoute("/")({
   validateSearch: z.object({
@@ -46,14 +38,18 @@ export const Route = createFileRoute("/")({
 function Index() {
   const router = useRouter();
   const data = Route.useLoaderData();
+  const [editingRoomId, setEditingRoomId] = useState<string | null>(null);
   const [notification, setNotification] = useState<{
     message?: string;
     severity?: AlertProps["severity"];
     open: boolean;
   }>({ open: false });
-  const { mutate: mutateDeletion, isPending: isPendingDelete } = useMutation({ mutationFn: deleteRoom });
-  const { mutate: mutateRename, isPending: isPendingPatch } = useMutation({ mutationFn: patchRoom });
-  const { handleOpen } = useRoomOperations();
+  const { mutate: mutateDeletion, isPending: isPendingDelete } = useMutation({
+    mutationFn: deleteRoom,
+  });
+  const { mutate: mutateRename, isPending: isRenamingPending } = useMutation({
+    mutationFn: patchRoom,
+  });
   const navigate = useNavigate({ from: Route.fullPath });
   const search = Route.useSearch();
 
@@ -68,20 +64,38 @@ function Index() {
       replace: true,
     });
 
-  const mutationOption = {
-    onSuccess: async (response: Response) => {
-      if (response.ok) {
-        const { message } = await response.json();
-        setNotification({ message, open: true });
-        router.invalidate();
-      } else {
-        const { error } = await response.json();
-        setNotification({ message: error, severity: "error", open: true });
-      }
+  const mutationOption = (kind: "deletion" | "renaming") => ({
+    onSuccess: async (result: Result<unknown>) => {
+      return result.match({
+        Ok: (value) => {
+          setNotification({
+            message:
+              kind === "deletion"
+                ? "Room successfully deleted"
+                : "Room successfully renamed",
+            open: true,
+          });
+          router.invalidate();
+        },
+        Error: (error) => {
+          console.error(error);
+          setNotification({
+            message:
+              kind === "deletion"
+                ? "Failed to delete room"
+                : "Failed to rename room",
+            severity: "error",
+            open: true,
+          });
+        },
+      });
     },
-  };
+  });
 
-  const handleClose = (event: React.SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason
+  ) => {
     if (reason === "clickaway") {
       return;
     }
@@ -103,66 +117,24 @@ function Index() {
         <TransitionGroup>
           {data.rooms.map((room) => (
             <Collapse key={room.id}>
-              <ListItem
-                disablePadding
-                secondaryAction={
-                  <PopupState variant="popover" popupId="demo-popup-menu">
-                    {(popupState) => (
-                      <Fragment>
-                        <IconButton edge="end" aria-label="more" {...bindTrigger(popupState)}>
-                          <MoreVertIcon />
-                        </IconButton>
-                        <Menu {...bindMenu(popupState)}>
-                          <MenuItem
-                            onClick={() => {
-                              mutateDeletion(room.id, mutationOption);
-                              popupState.close();
-                            }}
-                          >
-                            Delete
-                          </MenuItem>
-                          <MenuItem
-                            onClick={() => {
-                              popupState.close();
-                              handleOpen(room);
-                              return;
-                              mutateRename(
-                                {
-                                  roomId: room.id,
-                                  body: {
-                                    name: "morge",
-                                  },
-                                },
-                                mutationOption
-                              );
-                            }}
-                          >
-                            Rename
-                          </MenuItem>
-                        </Menu>
-                      </Fragment>
-                    )}
-                  </PopupState>
-                }
-              >
-                <ButtonLink
-                  disabled={isPendingDelete}
-                  to="/rooms/$roomId"
-                  params={{
-                    roomId: room.id,
-                  }}
-                >
-                  <ListItemAvatar>
-                    <Avatar uuid={room.id} alias={room.name} kind="Room" />
-                  </ListItemAvatar>
-                  <ListItemText primary={room.name} />
-                  <ListItemIcon>
-                    {room.busy ? <EventBusyIcon color="error" /> : <EventAvailableIcon color="success" />}
-                  </ListItemIcon>
-                </ButtonLink>
-                {/*index !== rooms.length - 1 && <Divider variant="inset" component="li" />
-                 */}
-              </ListItem>
+              <RoomRow
+                room={room}
+                editingRoomId={editingRoomId}
+                onRename={({ name }) => {
+                  mutateRename(
+                    {
+                      roomId: room.id,
+                      name,
+                    },
+                    mutationOption("renaming")
+                  );
+                }}
+                onDelete={() => {
+                  mutateDeletion(room.id, mutationOption("deletion"));
+                }}
+                setEditingRoomId={setEditingRoomId}
+                loading={isRenamingPending || isPendingDelete}
+              />
             </Collapse>
           ))}
         </TransitionGroup>
@@ -174,7 +146,12 @@ function Index() {
         onClose={handleClose}
         key={JSON.stringify(notification)}
       >
-        <Alert onClose={handleClose} severity={notification.severity} variant="filled" sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleClose}
+          severity={notification.severity}
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
           {notification.message}
         </Alert>
       </Snackbar>
