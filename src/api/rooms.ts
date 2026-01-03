@@ -62,8 +62,7 @@ async function getRoom(id: string) {
     .select(
       `*,
       devices(id, name, type, batterylevel),
-      users(id, firstname, lastname, avatarpath)
-    `
+      users!bookerid(id, email, first_name, last_name)`
     )
     .eq("id", id)
     .single();

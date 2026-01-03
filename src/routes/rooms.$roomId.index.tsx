@@ -1,4 +1,4 @@
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { getRoom, postBooking } from "../api";
 import Typography from "@mui/material/Typography";
@@ -125,6 +125,7 @@ function RoomDetail() {
   };
 
   console.log("current user id", user?.id);
+  console.log("room", room);
 
   return (
     <>

@@ -74,11 +74,11 @@ async function seedDatabase() {
     const roomData = {
       name: `${faker.company.catchPhrase()} ${faker.location.buildingNumber()}`,
       address: faker.location.streetAddress(true),
-      bookerId,
+      bookerid: bookerId,
     };
 
-    const { data, error } = await supabase
-      .from("Rooms")
+    const { data, error } = await supabaseAdmin
+      .from("rooms")
       .insert(roomData)
       .select()
       .single();
@@ -113,12 +113,12 @@ async function seedDatabase() {
     const deviceData = {
       name: `${faker.company.name()} ${deviceType}`,
       type: deviceType,
-      hosterId,
-      batteryLevel: Math.floor(Math.random() * 101), // 0-100
+      hosterid: hosterId,
+      batterylevel: Math.floor(Math.random() * 101), // 0-100
     };
 
-    const { data, error } = await supabase
-      .from("Devices")
+    const { data, error } = await supabaseAdmin
+      .from("devices")
       .insert(deviceData)
       .select()
       .single();
