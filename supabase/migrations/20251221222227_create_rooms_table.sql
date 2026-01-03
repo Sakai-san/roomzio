@@ -20,11 +20,11 @@ CREATE TABLE IF NOT EXISTS Rooms (
   id UUID DEFAULT gen_random_uuid(),
   name VARCHAR NOT NULL,
   address VARCHAR,
-  bookerId UUID,
+  booker_id UUID,
   inserted_at timestamp with time zone default timezone('utc'::text, now()) NOT NULL,
   updated_at timestamp with time zone default timezone('utc'::text, now()) NOT NULL,
   PRIMARY KEY(id),
-  CONSTRAINT fk_booker FOREIGN KEY (bookerId) REFERENCES Auth.Users(id)
+  CONSTRAINT fk_booker FOREIGN KEY (booker_id) REFERENCES Auth.Users(id)
 );
 
 
@@ -33,11 +33,11 @@ CREATE TABLE IF NOT EXISTS Devices (
   id UUID DEFAULT gen_random_uuid(),
   name VARCHAR NOT NULL,
   type device,
-  hosterId UUID,
-  batteryLevel INT,
+  hoster_id UUID,
+  battery_level INT,
   inserted_at timestamp with time zone default timezone('utc'::text, now()) NOT NULL,
   updated_at timestamp with time zone default timezone('utc'::text, now()) NOT NULL,
   PRIMARY KEY(id),
-  CONSTRAINT fk_host FOREIGN KEY (hosterId) REFERENCES Rooms(id) ON DELETE CASCADE
+  CONSTRAINT fk_hoster FOREIGN KEY (hoster_id) REFERENCES Rooms(id) ON DELETE CASCADE
 );
 
