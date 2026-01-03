@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { getRoom, postBooking } from "../api";
 import Typography from "@mui/material/Typography";
@@ -23,6 +23,7 @@ import { Avatar } from "../components/Avatar";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LockIcon from "@mui/icons-material/Lock";
 import { Result } from "@swan-io/boxed";
+import { useAuth } from "../providers";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
@@ -58,6 +59,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 function RoomDetail() {
+  const { user } = useAuth();
   const router = useRouter();
   const room = Route.useLoaderData();
   const { roomId } = Route.useParams();
@@ -122,6 +124,8 @@ function RoomDetail() {
     setNotification({ open: false });
   };
 
+  console.log("current user id", user?.id);
+
   return (
     <>
       <Stack alignItems="center" width="100%">
@@ -159,13 +163,15 @@ function RoomDetail() {
               disabled={isPendingBook}
               aria-label="book a room"
               onClick={() =>
-                mutateBook(
-                  {
-                    roomId: roomId,
-                    userId: "894743a8-66b7-4e4a-b276-12502122f898",
-                  },
-                  mutationOption
-                )
+                user
+                  ? mutateBook(
+                      {
+                        roomId: roomId,
+                        userId: user.id,
+                      },
+                      mutationOption
+                    )
+                  : null
               }
             >
               <LockIcon />
