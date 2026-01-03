@@ -6,7 +6,8 @@
   "scripts": {
     "start": "npm-run-all --parallel start:*",
     "__nothingstart:api": "npx vite-node api/server.ts",
-    "start:client": "vite"
+    "start:client": "vite",
+    "seed": "npx vite-node api/seed-database.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
