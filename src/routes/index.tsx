@@ -103,7 +103,6 @@ function Index() {
     setNotification({ open: false });
   };
 
-  console.log("data", data);
   return (
     <Stack>
       <List
