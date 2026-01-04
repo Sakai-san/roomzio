@@ -1,4 +1,4 @@
-import Container from "@mui/material/Container/Container";
+import Container from "@mui/material/Container";
 import {
   createRootRoute,
   Outlet,
@@ -13,7 +13,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useAuth } from "../providers/auth";
 import { useEffect } from "react";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
 
 export const Route = createRootRoute({
   component: RootComponent,
