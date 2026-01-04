@@ -15,6 +15,7 @@ import Collapse from "@mui/material/Collapse";
 import Pagination from "@mui/material/Pagination";
 import { z } from "zod";
 import Stack from "@mui/material/Stack";
+import { match, P } from "ts-pattern";
 import { Result } from "@swan-io/boxed";
 import { RoomRow } from "../components/RomRow";
 
@@ -102,7 +103,7 @@ function Index() {
 
     setNotification({ open: false });
   };
-
+  console.log("Rooms data:", data);
   return (
     <Stack>
       <List
@@ -115,28 +116,36 @@ function Index() {
         component="nav"
       >
         <TransitionGroup>
-          {data.rooms.map((room) => (
-            <Collapse key={room.id}>
-              <RoomRow
-                room={room}
-                editingRoomId={editingRoomId}
-                onRename={({ name }) => {
-                  mutateRename(
-                    {
-                      roomId: room.id,
-                      name,
-                    },
-                    mutationOption("renaming")
-                  );
-                }}
-                onDelete={() => {
-                  mutateDeletion(room.id, mutationOption("deletion"));
-                }}
-                setEditingRoomId={setEditingRoomId}
-                loading={isRenamingPending || isPendingDelete}
-              />
-            </Collapse>
-          ))}
+          {match(data)
+            .with(Result.P.Ok(P.select()), (value) =>
+              value.rooms.map((room) => (
+                <Collapse key={room.id}>
+                  <RoomRow
+                    room={room}
+                    editingRoomId={editingRoomId}
+                    onRename={({ name }) => {
+                      mutateRename(
+                        {
+                          roomId: room.id,
+                          name,
+                        },
+                        mutationOption("renaming")
+                      );
+                    }}
+                    onDelete={() => {
+                      mutateDeletion(room.id, mutationOption("deletion"));
+                    }}
+                    setEditingRoomId={setEditingRoomId}
+                    loading={isRenamingPending || isPendingDelete}
+                  />
+                </Collapse>
+              ))
+            )
+            .with(Result.P.Error(P.select()), (error) => {
+              console.error(error);
+              return null;
+            })
+            .exhaustive()}
         </TransitionGroup>
       </List>
       <Snackbar

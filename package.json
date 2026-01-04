@@ -29,6 +29,7 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-hook-form": "^7.69.0",
+    "ts-pattern": "^5.9.0",
     "uniqolor": "^1.1.1",
     "zod": "^4.3.4"
   },

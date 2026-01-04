@@ -20,7 +20,7 @@ type RoomRowProps = {
   room: {
     id: string;
     name: string;
-    busy: boolean;
+    booker_id: string | null;
   };
   editingRoomId: string | null;
   onRename: (data: { name: string }) => void;
@@ -37,6 +37,7 @@ export const RoomRow: FC<RoomRowProps> = ({
   setEditingRoomId,
   loading,
 }) => {
+  const isRoomBooked = !!room.booker_id;
   return (
     <ListItem
       disablePadding
@@ -103,7 +104,7 @@ export const RoomRow: FC<RoomRowProps> = ({
               }
             />
             <ListItemIcon>
-              {room.busy ? (
+              {isRoomBooked ? (
                 <EventBusyIcon color="error" />
               ) : (
                 <EventAvailableIcon color="success" />
@@ -124,7 +125,7 @@ export const RoomRow: FC<RoomRowProps> = ({
           </ListItemAvatar>
           <ListItemText primary={room.name} />
           <ListItemIcon>
-            {room.busy ? (
+            {isRoomBooked ? (
               <EventBusyIcon color="error" />
             ) : (
               <EventAvailableIcon color="success" />

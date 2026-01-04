@@ -1,12 +1,6 @@
 import { supabase } from "../lib/supabase";
 import { Result } from "@swan-io/boxed";
 
-export type RoomType = {
-  id: string;
-  name: string;
-  busy: boolean;
-};
-
 const SIZE = 50;
 
 const patchRoom = async ({
@@ -26,9 +20,7 @@ const patchRoom = async ({
   return error ? Result.Error(error) : Result.Ok(data);
 };
 
-async function getRooms(
-  page: number
-): Promise<{ count: number; rooms: Array<RoomType> }> {
+async function getRooms(page: number) {
   const from = (page - 1) * SIZE;
   const to = from + SIZE - 1;
 
@@ -41,18 +33,16 @@ async function getRooms(
     .select("id, name, booker_id", { count: "exact" })
     .range(from, to);
 
-  if (error) throw error;
-
-  const response = {
-    count: Math.ceil((count || 0) / SIZE),
-    rooms: (rooms || []).map(({ id, name, booker_id }) => ({
-      id,
-      name,
-      busy: !!booker_id,
-    })) as Array<RoomType>,
-  };
-
-  return response;
+  return error
+    ? Result.Error(error)
+    : Result.Ok({
+        count: Math.ceil((count || 0) / SIZE),
+        rooms: (rooms || []) as Array<{
+          id: string;
+          name: string;
+          booker_id: string | null;
+        }>,
+      });
 }
 
 async function getRoom(id: string) {
