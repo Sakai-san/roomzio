@@ -165,26 +165,34 @@ function Index() {
         </Alert>
       </Snackbar>
 
-      <Pagination
-        sx={{
-          paddingTop: "8px",
-          paddingBottom: "8px",
-          backfaceVisibility: "hidden",
-          backdropFilter: "blur(20px)",
-          transform: "translateZ(0px)",
-          position: "fixed",
-          left: 0,
-          zIndex: 1125,
-          width: "100%",
-          bottom: 0,
-          display: "flex",
-          justifyContent: "center",
-        }}
-        count={data.count}
-        page={search.page}
-        color="primary"
-        onChange={goTo}
-      />
+      {match(data)
+        .with(Result.P.Ok(P.select()), (value) => (
+          <Pagination
+            sx={{
+              paddingTop: "8px",
+              paddingBottom: "8px",
+              backfaceVisibility: "hidden",
+              backdropFilter: "blur(20px)",
+              transform: "translateZ(0px)",
+              position: "fixed",
+              left: 0,
+              zIndex: 1125,
+              width: "100%",
+              bottom: 0,
+              display: "flex",
+              justifyContent: "center",
+            }}
+            count={value.count}
+            page={search.page}
+            color="primary"
+            onChange={goTo}
+          />
+        ))
+        .with(Result.P.Error(P.select()), (error) => {
+          console.error(error);
+          return null;
+        })
+        .exhaustive()}
     </Stack>
   );
 }
