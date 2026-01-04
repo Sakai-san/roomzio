@@ -55,7 +55,7 @@ function DeviceDetail() {
           <Badge
             max={100}
             color="secondary"
-            badgeContent={device.batterylevel}
+            badgeContent={device.battery_level}
             sx={{
               "& .MuiBadge-badge": {
                 right: -8,
