@@ -13,6 +13,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useAuth } from "../providers/auth";
 import { useEffect } from "react";
+import { Typography } from "@mui/material";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -69,6 +70,9 @@ function RootComponent() {
         <BreadcrumbNav />
         {user && (
           <Box sx={{ position: "absolute", right: 10, top: 10 }}>
+            <Typography component="span" sx={{ marginRight: 2 }}>
+              Hello, {user.user_metadata.first_name || user.email}
+            </Typography>
             <Button onClick={() => signOut()} variant="outlined" size="small">
               Logout
             </Button>
