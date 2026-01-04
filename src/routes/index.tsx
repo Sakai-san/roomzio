@@ -103,7 +103,7 @@ function Index() {
 
     setNotification({ open: false });
   };
-  console.log("Rooms data:", data);
+
   return (
     <Stack>
       <List
