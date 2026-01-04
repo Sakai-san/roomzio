@@ -37,7 +37,7 @@ async function getRooms(page: number) {
     ? Result.Error(error)
     : Result.Ok({
         count: Math.ceil((count || 0) / SIZE),
-        rooms: (rooms || []) as Array<{
+        rooms: rooms as Array<{
           id: string;
           name: string;
           booker_id: string | null;
