@@ -10,7 +10,7 @@ const postBooking = async ({
 }) => {
   const { data, error } = await supabase
     .from("rooms")
-    .update({ bookerid: userId })
+    .update({ booker_id: userId })
     .eq("id", roomId)
     .select()
     .single();

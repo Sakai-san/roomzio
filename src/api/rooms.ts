@@ -39,17 +39,17 @@ async function getRooms(
     count,
   } = await supabase
     .from("rooms")
-    .select("id, name, bookerid", { count: "exact" })
+    .select("id, name, booker_id", { count: "exact" })
     .range(from, to);
 
   if (error) throw error;
 
   const response = {
     count: Math.ceil((count || 0) / SIZE),
-    rooms: (rooms || []).map(({ id, name, bookerid }) => ({
+    rooms: (rooms || []).map(({ id, name, booker_id }) => ({
       id,
       name,
-      busy: !!bookerid,
+      busy: !!booker_id,
     })) as Array<RoomType>,
   };
 
@@ -61,8 +61,8 @@ async function getRoom(id: string) {
     .from("rooms")
     .select(
       `*,
-      devices(id, name, type, batterylevel),
-      users!bookerid(id, email, first_name, last_name)`
+      devices(id, name, type, battery_level),
+      Auth.users(*)`
     )
     .eq("id", id)
     .single();

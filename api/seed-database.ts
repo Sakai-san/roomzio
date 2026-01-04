@@ -9,27 +9,12 @@ import { Client } from "pg";
 import { spawnSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
+import type { components } from "../src/types/supabase-rest";
 import { supabaseAdmin } from "./supabase.ts";
 
-type CreatedUser = {
-  id: string;
-  email: string;
-};
-
-type RoomRecord = {
-  id: string;
-  name: string;
-  address: string | null;
-  booker_id: string | null;
-};
-
-type DeviceRecord = {
-  id: string;
-  name: string;
-  type: string;
-  hoster_id: string | null;
-  battery_level: number;
-};
+type CreatedUser = components["schemas"]["users"];
+type RoomRecord = components["schemas"]["rooms"];
+type DeviceRecord = components["schemas"]["devices"];
 
 const PASSWORD = "1234";
 const USER_COUNT = 10;
