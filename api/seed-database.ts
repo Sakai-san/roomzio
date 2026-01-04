@@ -1,9 +1,10 @@
-// studio : http://localhost:54323/
+// studio: http://localhost:54323/
 // script: npx ts-node --esm --project api/tsconfig.json api/seed-database.ts
 
 import "dotenv/config";
 import { faker } from "@faker-js/faker";
-import openapiTS from "openapi-typescript";
+import openapiTS, { astToString } from "openapi-typescript";
+import { convertObj as convertSwaggerToOpenAPI } from "swagger2openapi";
 import { Client } from "pg";
 import { spawnSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
@@ -309,25 +310,39 @@ async function generateRestTypes() {
     return;
   }
 
-  const schemaUrl = `${supabaseUrl}/rest/v1/?apikey=${apiKey}`;
+  const schemaUrl = `${supabaseUrl}/rest/v1/`;
 
   try {
     const response = await fetch(schemaUrl, {
       headers: {
         apikey: apiKey,
         Authorization: `Bearer ${apiKey}`,
+        Accept: "application/openapi+json",
+        "Content-Type": "application/json",
       },
     });
 
     if (!response.ok) {
-      throw new Error(`Unexpected status ${response.status}`);
+      const body = await response.text().catch(() => "<unable to read body>");
+      throw new Error(`Unexpected status ${response.status}: ${body}`);
     }
 
-    const schema = await response.json();
-    const typeDefs = await openapiTS(schema, {
+    let schema = await response.json();
+
+    if (schema?.swagger?.startsWith("2.")) {
+      console.log("   ℹ️  Converting Swagger 2.0 schema to OpenAPI 3...");
+      const converted = await convertSwaggerToOpenAPI(schema, {
+        patch: true,
+        warnOnly: true,
+      });
+      schema = converted.openapi;
+    }
+
+    const ast = await openapiTS(schema, {
       alphabetize: true,
       exportType: true,
     });
+    const typeDefs = typeof ast === "string" ? ast : astToString(ast);
 
     const targetPath = join(
       process.cwd(),
