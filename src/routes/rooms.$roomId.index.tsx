@@ -157,33 +157,36 @@ function RoomDetail() {
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton
-              disabled={isPendingBook}
-              aria-label="book a room"
-              onClick={() =>
-                user
-                  ? mutateBook(
-                      {
-                        roomId: roomId,
-                        userId: user.id,
-                      },
-                      mutationOption
-                    )
-                  : null
-              }
-            >
-              <LockIcon />
-            </IconButton>
-
-            <IconButton
-              disabled={isPendingRelease}
-              aria-label="release a room"
-              onClick={() =>
-                mutateRelease({ roomId, userId: null }, mutationOption)
-              }
-            >
-              <LockOpenIcon />
-            </IconButton>
+            {!isRoomOccupied && (
+              <IconButton
+                disabled={isPendingBook}
+                aria-label="book a room"
+                onClick={() =>
+                  user
+                    ? mutateBook(
+                        {
+                          roomId: roomId,
+                          userId: user.id,
+                        },
+                        mutationOption
+                      )
+                    : null
+                }
+              >
+                <LockIcon />
+              </IconButton>
+            )}
+            {isRoomOccupied && (
+              <IconButton
+                disabled={isPendingRelease}
+                aria-label="release a room"
+                onClick={() =>
+                  mutateRelease({ roomId, userId: null }, mutationOption)
+                }
+              >
+                <LockOpenIcon />
+              </IconButton>
+            )}
 
             {isRoomOccupied && (
               <ExpandMore
