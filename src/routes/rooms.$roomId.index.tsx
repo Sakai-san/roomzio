@@ -101,7 +101,7 @@ function RoomDetail() {
     },
   };
 
-  const isRoomOccupied = !!room.bookerid;
+  const isRoomOccupied = !!room.booker_id;
 
   const [expanded, setExpanded] = useState(false);
 
@@ -211,10 +211,10 @@ function RoomDetail() {
                 gap={3}
               >
                 <MUIAvatar
-                  alt={`${room.users?.firstname} ${room.users?.lastname}`}
+                  alt={`${room.users?.first_name} ${room.users?.last_name}`}
                   src={room.users?.avatarpath}
                 ></MUIAvatar>
-                <Typography>{`${room.users?.firstname} ${room.users?.lastname}`}</Typography>
+                <Typography>{`${room.users?.first_name} ${room.users?.last_name}`}</Typography>
               </Stack>
             </CardContent>
           </Collapse>
