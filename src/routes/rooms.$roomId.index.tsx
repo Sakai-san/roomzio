@@ -124,9 +124,6 @@ function RoomDetail() {
     setNotification({ open: false });
   };
 
-  console.log("current user id", user?.id);
-  console.log("room", room);
-
   return (
     <>
       <Stack alignItems="center" width="100%">
