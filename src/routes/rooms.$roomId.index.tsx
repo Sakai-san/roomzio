@@ -82,7 +82,7 @@ function RoomDetail() {
         Ok: (value) => {
           setNotification({
             message:
-              value?.bookerid === null
+              value?.booker_id === null
                 ? "Room successfully released"
                 : "Room successfully booked",
             open: true,
