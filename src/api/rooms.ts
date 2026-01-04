@@ -1,4 +1,3 @@
-import { NonEmptyString } from "../types";
 import { supabase } from "../lib/supabase";
 import { Result } from "@swan-io/boxed";
 
@@ -62,7 +61,7 @@ async function getRoom(id: string) {
     .select(
       `*,
       devices(id, name, type, battery_level),
-      Auth.users(*)`
+      users!fk_booker(id, email, first_name, last_name)`
     )
     .eq("id", id)
     .single();
