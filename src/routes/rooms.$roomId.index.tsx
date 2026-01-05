@@ -163,13 +163,7 @@ function RoomDetail() {
                 aria-label="book a room"
                 onClick={() =>
                   user
-                    ? mutateBook(
-                        {
-                          roomId: roomId,
-                          userId: user.id,
-                        },
-                        mutationOption
-                      )
+                    ? mutateBook({ roomId, userId: user.id }, mutationOption)
                     : null
                 }
               >
