@@ -1,5 +1,5 @@
-import { supabase } from "../lib/supabase";
 import { Result } from "@swan-io/boxed";
+import { supabase } from "../lib/supabase";
 
 const SIZE = 50;
 
