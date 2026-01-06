@@ -19,6 +19,7 @@ import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
 import Alert, { AlertProps } from "@mui/material/Alert/Alert";
 import Stack from "@mui/material/Stack/Stack";
 import { Avatar as MUIAvatar } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 import { Avatar } from "../components/Avatar";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import LockIcon from "@mui/icons-material/Lock";
@@ -158,28 +159,32 @@ function RoomDetail() {
           </CardContent>
           <CardActions disableSpacing>
             {!isRoomOccupied && (
-              <IconButton
-                disabled={isPendingBook}
-                aria-label="book a room"
-                onClick={() =>
-                  user
-                    ? mutateBook({ roomId, userId: user.id }, mutationOption)
-                    : null
-                }
-              >
-                <LockIcon />
-              </IconButton>
+              <Tooltip title="Book this room">
+                <IconButton
+                  disabled={isPendingBook}
+                  aria-label="book a room"
+                  onClick={() =>
+                    user
+                      ? mutateBook({ roomId, userId: user.id }, mutationOption)
+                      : null
+                  }
+                >
+                  <LockIcon />
+                </IconButton>
+              </Tooltip>
             )}
             {isRoomOccupied && (
-              <IconButton
-                disabled={isPendingRelease}
-                aria-label="release a room"
-                onClick={() =>
-                  mutateRelease({ roomId, userId: null }, mutationOption)
-                }
-              >
-                <LockOpenIcon />
-              </IconButton>
+              <Tooltip title="Release this room">
+                <IconButton
+                  disabled={isPendingRelease}
+                  aria-label="release a room"
+                  onClick={() =>
+                    mutateRelease({ roomId, userId: null }, mutationOption)
+                  }
+                >
+                  <LockOpenIcon />
+                </IconButton>
+              </Tooltip>
             )}
 
             {isRoomOccupied && (
