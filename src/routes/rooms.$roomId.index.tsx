@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Result } from "@swan-io/boxed";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useMutation } from "@tanstack/react-query";
 import Typography from "@mui/material/Typography";
@@ -10,7 +11,7 @@ import CardActions from "@mui/material/CardActions";
 import Stack from "@mui/material/Stack";
 import IconButton, { type IconButtonProps } from "@mui/material/IconButton";
 import Snackbar, { SnackbarCloseReason } from "@mui/material/Snackbar";
-import Alert, { AlertProps } from "@mui/material/Alert/Alert";
+import Alert, { type AlertProps } from "@mui/material/Alert";
 import Collapse from "@mui/material/Collapse";
 import Tooltip from "@mui/material/Tooltip";
 import DevicesOtherIcon from "@mui/icons-material/DevicesOther";
@@ -22,9 +23,8 @@ import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import { getRoom, postBooking } from "../api";
 import { ButtonLink } from "../components/ButtonLink";
 import { Avatar as MUIAvatar } from "@mui/material";
-import { Avatar } from "../components/Avatar";
-import { Result } from "@swan-io/boxed";
 import { useAuth } from "../providers";
+import { Avatar } from "../components/Avatar";
 
 export const Route = createFileRoute("/rooms/$roomId/")({
   loader: ({ params: { roomId } }) => getRoom(roomId),
