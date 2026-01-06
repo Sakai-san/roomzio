@@ -35,10 +35,9 @@ interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
 
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme }) => ({
+const ExpandMore = styled((props: ExpandMoreProps) => (
+  <IconButton {...props} />
+))(({ theme }) => ({
   marginLeft: "auto",
   transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
