@@ -4,17 +4,17 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 import EventBusyIcon from "@mui/icons-material/EventBusy";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Menu from "@mui/material/Menu";
-import { ButtonLink } from "./ButtonLink";
-import { Avatar } from "./Avatar";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 import MenuItem from "@mui/material/MenuItem";
-import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import Menu from "@mui/material/Menu";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IconButton from "@mui/material/IconButton";
 import ListItem from "@mui/material/ListItem";
-import { RenameRoomForm } from "./RenameRoomForm";
 import Box from "@mui/material/Box";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import { ButtonLink } from "./ButtonLink";
+import { Avatar } from "./Avatar";
+import { RenameRoomForm } from "./RenameRoomForm";
 
 type RoomRowProps = {
   room: {
