@@ -110,9 +110,7 @@ function RoomDetail() {
     setExpanded(false);
   }, [isRoomOccupied]);
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
+  const handleExpandClick = () => setExpanded(!expanded);
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
